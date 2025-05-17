@@ -1,4 +1,4 @@
-import { Table } from "./components/Table";
+import { Table } from "./components/table/Table";
 
 export function App(): HTMLElement {
   const app = document.createElement("div");
