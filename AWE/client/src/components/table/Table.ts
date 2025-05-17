@@ -1,4 +1,3 @@
-import "./Table.css"
 export function Table() {
   const wrapper = document.createElement("table");
   wrapper.className = "table-container"
