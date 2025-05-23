@@ -15,7 +15,7 @@ const STATIC_DIR = join(ROOT, "public");
 
 async function getHtmlWithPartials() {
   let template = await readFile(TEMPLATE_PATH, "utf-8");
-  const partials = ["header", "date-form", "table-header"];
+  const partials = ["header", "date-form", "table"];
   for (const name of partials) {
     const content = await readFile(join(PARTIALS_DIR, `${name}.html`), "utf-8");
     template = template.replace(`{{partial ${name}}}`, content);
