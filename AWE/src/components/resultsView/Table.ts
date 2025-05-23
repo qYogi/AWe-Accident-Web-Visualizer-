@@ -1,6 +1,8 @@
 export function Table() {
   const wrapper = document.createElement("table");
-  wrapper.className = "table-container"
+  wrapper.className = "table-container";
+
+  //syntax highlighting
   wrapper.innerHTML = `
   <thead>
     <tr>
@@ -19,7 +21,7 @@ export function Table() {
   <tbody>
     <tr>
       <td>1</td>
-      <td>SampleSource</td>
+      <td>SampleSource</td> 
       <td>3</td>
       <td>2023-01-01 12:00</td> 
       <td>2023-01-01 13:00</td>
