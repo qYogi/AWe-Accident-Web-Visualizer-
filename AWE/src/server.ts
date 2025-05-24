@@ -27,7 +27,7 @@ createServer(async (req, res) => {
   try {
     const { pathname, searchParams } = new URL(
       req.url!,
-      `http://${req.headers.host}`
+      `http://${req.headers.host}`,
     );
 
     if (pathname === "/api/accidents") {
@@ -47,7 +47,7 @@ createServer(async (req, res) => {
            WHERE start_time >= $1 AND start_time <= $2
            ORDER BY start_time DESC
            LIMIT 100`,
-          [startDate, endDate]
+          [startDate, endDate],
         );
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify(result.rows));
@@ -65,6 +65,7 @@ createServer(async (req, res) => {
       res.end(html);
       return;
     }
+
     const filePath = join(STATIC_DIR, pathname);
     try {
       const content = await readFile(filePath);
