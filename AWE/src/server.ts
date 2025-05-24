@@ -45,7 +45,7 @@ createServer(async (req, res) => {
           `SELECT id, source, severity, start_time, end_time, start_lat, start_lng, end_lat, end_lng, distance_mi
            FROM accidents
            WHERE start_time >= $1 AND start_time <= $2
-           ORDER BY start_time DESC
+           ORDER BY start_time ASC
            LIMIT 100`,
           [startDate, endDate],
         );
