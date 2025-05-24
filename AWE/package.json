@@ -4,18 +4,21 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/server.ts"
+    "build": "tsc",
+    "build:client": "tsc",
+    "dev": "tsc && tsx watch src/server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "leaflet": "^1.9.4",
     "pg": "^8.16.0",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.18",
     "@types/pg": "^8.15.2",
     "tsx": "^4.19.4"
   }

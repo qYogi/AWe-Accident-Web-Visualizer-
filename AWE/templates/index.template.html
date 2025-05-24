@@ -1,17 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/styles.css" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <header>{{partial header}}</header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles.css" />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        />
+        <script
+            type="module"
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js"
+        ></script>
 
-    <section id="filters">{{partial date-form}}</section>
+        <title>Vite + TS</title>
+    </head>
+    <body>
+        <header>{{partial header}}</header>
+        <section id="filters">{{partial date-form}}</section>
 
-    <div id="results">{{partial table}}</div>
-    <script src="/js/main.js"></script>
-  </body>
+        <main>
+            <div id="results">{{partial table}}</div>
+            <section id="map" style="height: 500px"></section>
+        </main>
+        <script type="module" src="/js/main.js"></script>
+    </body>
 </html>
