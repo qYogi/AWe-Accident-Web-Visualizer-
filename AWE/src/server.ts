@@ -31,19 +31,30 @@ createServer(async (req, res) => {
     );
 
     if (pathname === "/api/accidents") {
-      const state = searchParams.get("state") || "CA";
-      const limit = parseInt(searchParams.get("limit") || "50", 10);
+      const startDate = searchParams.get("start_date");
+      const endDate = searchParams.get("end_date");
+
+      if (!startDate || !endDate) {
+        res.writeHead(400);
+        res.end("Start date and end date are required");
+        return;
+      }
 
       try {
         const result = await pool.query(
-          `SELECT * FROM accidents WHERE state = $1 LIMIT $2`,
-          [state, limit]
+          `SELECT id, source, severity, start_time, end_time, start_lat, start_lng, end_lat, end_lng, distance_mi
+           FROM accidents
+           WHERE start_time >= $1 AND start_time <= $2
+           ORDER BY start_time DESC
+           LIMIT 100`,
+          [startDate, endDate]
         );
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify(result.rows));
       } catch (error) {
+        console.error("Database error:", error);
         res.writeHead(500);
-        res.end("Error querying db");
+        res.end("Error querying database");
       }
       return;
     }
@@ -54,8 +65,6 @@ createServer(async (req, res) => {
       res.end(html);
       return;
     }
-
-    // Serve static files from client/public
     const filePath = join(STATIC_DIR, pathname);
     try {
       const content = await readFile(filePath);
