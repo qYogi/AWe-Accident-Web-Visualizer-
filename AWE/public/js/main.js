@@ -1,4 +1,5 @@
-import { initMap, setAccidents } from "./map.js";
+import { initMap } from "./map.js";
+import { displayAccidents } from "./displayAccidents.js";
 document.addEventListener("DOMContentLoaded", () => {
     initMap("map");
     document
@@ -21,30 +22,3 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-function displayAccidents(accidents) {
-    const tableBody = document.querySelector("#accidents-table tbody");
-    if (!tableBody)
-        return;
-    tableBody.innerHTML = "";
-    accidents.forEach((accident) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${accident.id || ""}</td>
-            <td>${accident.source || ""}</td>
-            <td>${accident.severity || ""}</td>
-            <td>${accident.start_time
-            ? new Date(accident.start_time).toLocaleString()
-            : ""}</td>
-            <td>${accident.end_time
-            ? new Date(accident.end_time).toLocaleString()
-            : ""}</td>
-            <td>${accident.start_lat || ""}</td>
-            <td>${accident.start_lng || ""}</td>
-            <td>${accident.end_lat || ""}</td>
-            <td>${accident.end_lng || ""}</td>
-            <td>${accident.distance_mi || ""}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-    setAccidents(accidents);
-}

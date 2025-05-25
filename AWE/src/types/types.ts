@@ -11,4 +11,18 @@ export type Accident = {
   start_lng: string;
   description: string;
   distance_mi: string;
+  amenity?: boolean;
+  bump?: boolean;
+  crossing?: boolean;
+  give_way?: boolean;
+  junction?: boolean;
+  no_exit?: boolean;
+  railway?: boolean;
+  roundabout?: boolean;
+  station?: boolean;
+  stop?: boolean;
+  traffic_calming?: boolean;
+  traffic_signal?: boolean;
+  turning_loop?: boolean;
+  [key: string]: any;
 };

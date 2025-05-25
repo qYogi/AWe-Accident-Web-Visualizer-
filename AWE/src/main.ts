@@ -1,5 +1,5 @@
-import { initMap, setAccidents } from "./map.js";
-import type { Accident } from "./types/types.js";
+import { initMap } from "./map.js";
+import { displayAccidents } from "./displayAccidents.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initMap("map");
@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
       )?.value;
       const endDate = (document.getElementById("end_date") as HTMLInputElement)
         ?.value;
+
       try {
         const response = await fetch(
           `/api/accidents?start_date=${startDate}&end_date=${endDate}`,
@@ -26,35 +27,3 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 });
-
-function displayAccidents(accidents: Accident[]) {
-  const tableBody = document.querySelector("#accidents-table tbody");
-  if (!tableBody) return;
-  tableBody.innerHTML = "";
-  accidents.forEach((accident) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-            <td>${accident.id || ""}</td>
-            <td>${accident.source || ""}</td>
-            <td>${accident.severity || ""}</td>
-            <td>${
-              accident.start_time
-                ? new Date(accident.start_time).toLocaleString()
-                : ""
-            }</td>
-            <td>${
-              accident.end_time
-                ? new Date(accident.end_time).toLocaleString()
-                : ""
-            }</td>
-            <td>${accident.start_lat || ""}</td>
-            <td>${accident.start_lng || ""}</td>
-            <td>${accident.end_lat || ""}</td>
-            <td>${accident.end_lng || ""}</td>
-            <td>${accident.distance_mi || ""}</td>
-        `;
-    tableBody.appendChild(row);
-  });
-
-  setAccidents(accidents);
-}
