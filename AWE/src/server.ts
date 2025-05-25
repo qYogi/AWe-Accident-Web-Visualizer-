@@ -42,7 +42,7 @@ createServer(async (req, res) => {
 
       try {
         const result = await pool.query(
-          `SELECT id, source, severity, start_time, end_time, start_lat, start_lng, end_lat, end_lng, distance_mi
+          `SELECT *
            FROM accidents
            WHERE start_time >= $1 AND start_time <= $2
            ORDER BY start_time ASC
