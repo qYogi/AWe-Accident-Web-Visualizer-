@@ -10,17 +10,3 @@ export const pool = new Pool({
         rejectUnauthorized: false,
     },
 });
-pool.connect((err, client) => {
-    if (err) {
-        console.log(err.stack);
-    }
-    client?.query("SELECT * from accidents LIMIT 2", (err, res) => {
-        if (err) {
-            console.log(err.stack);
-        }
-        else {
-            console.log(res.rows);
-        }
-        pool.end();
-    });
-});
