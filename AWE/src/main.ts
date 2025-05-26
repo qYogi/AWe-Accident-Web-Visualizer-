@@ -13,8 +13,25 @@ document.addEventListener("DOMContentLoaded", () => {
       )?.value;
       const endDate = (document.getElementById("end_date") as HTMLInputElement)
         ?.value;
+<<<<<<< Updated upstream
 
       try {
+=======
+    
+      const state = (document.getElementById("state") as HTMLSelectElement)
+        ?.value;
+      const severity = severitySlider.value;
+
+      try {
+        const queryParams = new URLSearchParams({
+          start_date: startDate,
+          end_date: endDate,
+        });
+
+        if (state && state !== "Choose a state") queryParams.append("state", state);
+        if (severity !== "0") queryParams.append("severity", severity);
+
+>>>>>>> Stashed changes
         const response = await fetch(
           `/api/accidents?start_date=${startDate}&end_date=${endDate}`,
         );

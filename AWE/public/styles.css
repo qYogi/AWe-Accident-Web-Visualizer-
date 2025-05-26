@@ -1,14 +1,65 @@
 body {
     font-family: Arial, sans-serif;
+<<<<<<< Updated upstream
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: #f5f5f5;
     min-height: 100vh;
+=======
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    width: 100%;
+}
+html,
+body {
+    height: 100%;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    margin: 0 auto;
+    max-height: 100%;
+    overflow-y: hidden;
+}
+
+#filters {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    height: 100%;
+}
+
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 100%;
+    overflow-x: hidden;
+    flex: 1;
+}
+
+#results {
+    overflow: auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+>>>>>>> Stashed changes
 }
 
 #map {
     height: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
 }
 
 h1 {
@@ -29,11 +80,15 @@ p {
 }
 
 form {
+<<<<<<< Updated upstream
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 20px 0;
+=======
+    height: 100%;
+>>>>>>> Stashed changes
     display: flex;
     gap: 15px;
     align-items: center;
@@ -68,6 +123,7 @@ button:hover {
     background-color: #45a049;
 }
 
+<<<<<<< Updated upstream
 .table-responsive {
   width: 100%;
   overflow-x: auto;
@@ -111,14 +167,26 @@ button:hover {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+=======
+#accidents-table {
+    width: 100%;
+    table-layout: auto;
+>>>>>>> Stashed changes
 }
 
 #accidents-table th,
 #accidents-table td {
+<<<<<<< Updated upstream
   border: 1.5px solid #222;
   padding: 12px;
   text-align: center;
   vertical-align: middle;
+=======
+    border: 1.5px solid #222;
+    padding: 1rem;
+    white-space: normal;
+    word-wrap: break-word;
+>>>>>>> Stashed changes
 }
 
 #accidents-table th {

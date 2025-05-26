@@ -15,7 +15,11 @@ const STATIC_DIR = join(ROOT, "public");
 
 async function getHtmlWithPartials() {
   let template = await readFile(TEMPLATE_PATH, "utf-8");
+<<<<<<< Updated upstream
   const partials = ["header", "date-form", "table"];
+=======
+  const partials = ["advanced-filter", "table"];
+>>>>>>> Stashed changes
   for (const name of partials) {
     const content = await readFile(join(PARTIALS_DIR, `${name}.html`), "utf-8");
     template = template.replace(`{{partial ${name}}}`, content);
@@ -33,6 +37,11 @@ createServer(async (req, res) => {
     if (pathname === "/api/accidents") {
       const startDate = searchParams.get("start_date");
       const endDate = searchParams.get("end_date");
+<<<<<<< Updated upstream
+=======
+      const state = searchParams.get("state");
+      const severity = searchParams.get("severity");
+>>>>>>> Stashed changes
 
       if (!startDate || !endDate) {
         res.writeHead(400);
@@ -41,6 +50,7 @@ createServer(async (req, res) => {
       }
 
       try {
+<<<<<<< Updated upstream
         const result = await pool.query(
           `SELECT *
            FROM accidents
@@ -49,6 +59,25 @@ createServer(async (req, res) => {
            LIMIT 100`,
           [startDate, endDate],
         );
+=======
+        let query = `SELECT * FROM accidents WHERE start_time BETWEEN $1 AND $2`;
+        const values = [startDate, endDate];
+        let paramIndex = 3;
+
+        if (state) {
+          query += ` AND state = $${paramIndex++}`;
+          values.push(state);
+        }
+
+        if (severity) {
+          query += ` AND severity = $${paramIndex++}`;
+          values.push(severity);
+        }
+
+        query += ` ORDER BY start_time DESC LIMIT 100`;
+
+        const result = await pool.query(query, values);
+>>>>>>> Stashed changes
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify(result.rows));
       } catch (error) {

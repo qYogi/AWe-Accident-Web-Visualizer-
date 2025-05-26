@@ -13,9 +13,10 @@
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js"
         ></script>
 
-        <title>Vite + TS</title>
+        <title>AWE | Accident web visaliser</title>
     </head>
     <body>
+<<<<<<< Updated upstream
         <header>{{partial header}}</header>
         <section id="filters">{{partial date-form}}</section>
 
@@ -23,6 +24,15 @@
             <div id="results">{{partial table}}</div>
             <section id="map" style="height: 500px"></section>
         </main>
+=======
+        <div class="layout">
+            <aside id="filters">{{partial advanced-filter}}</aside>
+            <main class="right-panel">
+                <section id="results">{{partial table}}</section>
+                <section id="map" style="height: 500px"></section>
+            </main>
+        </div>
+>>>>>>> Stashed changes
         <script type="module" src="/js/main.js"></script>
     </body>
 </html>
