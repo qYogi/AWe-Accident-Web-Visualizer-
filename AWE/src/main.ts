@@ -14,9 +14,24 @@ document.addEventListener("DOMContentLoaded", () => {
       const endDate = (document.getElementById("end_date") as HTMLInputElement)
         ?.value;
 
+      const state = (document.getElementById("state") as HTMLSelectElement)
+        ?.value;
+      const severity = (
+        document.getElementById("severity") as HTMLSelectElement
+      )?.value;
+
       try {
+        const queryParams = new URLSearchParams({
+          start_date: startDate,
+          end_date: endDate,
+        });
+
+        if (state && state !== "Choose a state")
+          queryParams.append("state", state);
+        if (severity !== "0") queryParams.append("severity", severity);
+
         const response = await fetch(
-          `/api/accidents?start_date=${startDate}&end_date=${endDate}`,
+          `/api/accidents?start_date=${startDate}&end_date=${endDate}`
         );
         if (!response.ok) throw new Error("Network response was not ok");
         const accidents = await response.json();

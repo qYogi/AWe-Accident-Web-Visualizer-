@@ -9,7 +9,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const startDate = document.getElementById("start_date")?.value;
         const endDate = document.getElementById("end_date")
             ?.value;
+        const state = document.getElementById("state")
+            ?.value;
+        const severity = document.getElementById("severity")?.value;
         try {
+            const queryParams = new URLSearchParams({
+                start_date: startDate,
+                end_date: endDate,
+            });
+            if (state && state !== "Choose a state")
+                queryParams.append("state", state);
+            if (severity !== "0")
+                queryParams.append("severity", severity);
             const response = await fetch(`/api/accidents?start_date=${startDate}&end_date=${endDate}`);
             if (!response.ok)
                 throw new Error("Network response was not ok");

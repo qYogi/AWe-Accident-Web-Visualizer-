@@ -12,6 +12,12 @@ export function displayAccidents(accidents: Accident[]) {
   tableHead.innerHTML = "";
   tableBody.innerHTML = "";
 
+  // Set a max width for the table to prevent expanding too wide
+  const table = document.getElementById("accidents-table");
+  if (table) {
+    table.style.width = "100%";
+  }
+
   const flagColumns = [
     "amenity",
     "bump",
@@ -49,6 +55,9 @@ export function displayAccidents(accidents: Accident[]) {
             .split("_")
             .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
             .join(" ");
+    
+    // Add title attribute for tooltip on hover
+    th.setAttribute("title", th.textContent);
     headerRow.appendChild(th);
   });
   tableHead.appendChild(headerRow);
@@ -60,13 +69,18 @@ export function displayAccidents(accidents: Accident[]) {
       const td = document.createElement("td");
 
       if (column === "flags") {
-        td.textContent = extractActiveFlags(accident, flagColumns).join(", ");
+        const flagsText = extractActiveFlags(accident, flagColumns).join(", ");
+        td.textContent = flagsText;
+        td.setAttribute("title", flagsText);
       } else {
         let value = accident[column as keyof Accident] || "";
         if (column.includes("time") && value) {
           value = new Date(value as string).toLocaleString();
         }
+        
+        // Add title attribute for full text on hover
         td.textContent = value as string;
+        td.setAttribute("title", value as string);
       }
 
       row.appendChild(td);
