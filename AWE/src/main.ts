@@ -3,6 +3,19 @@ import { displayAccidents } from "./displayAccidents.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   initMap("map");
+  const severitySlider = document.getElementById(
+    "severity"
+  ) as HTMLInputElement;
+  const severityDisplay = document.getElementById("severity-value");
+
+  if (severitySlider && severityDisplay) {
+    severityDisplay.textContent =
+      severitySlider.value === "0" ? "All" : severitySlider.value;
+    severitySlider.addEventListener("input", () => {
+      severityDisplay.textContent =
+        severitySlider.value === "0" ? "All" : severitySlider.value;
+    });
+  }
 
   document
     .getElementById("date-form")
@@ -31,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (severity !== "0") queryParams.append("severity", severity);
 
         const response = await fetch(
-          `/api/accidents?start_date=${startDate}&end_date=${endDate}`
+          `/api/accidents?${queryParams.toString()}`
         );
         if (!response.ok) throw new Error("Network response was not ok");
         const accidents = await response.json();

@@ -9,7 +9,6 @@ export function displayAccidents(accidents) {
         return;
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
-    // Set a max width for the table to prevent expanding too wide
     const table = document.getElementById("accidents-table");
     if (table) {
         table.style.width = "100%";
@@ -44,7 +43,6 @@ export function displayAccidents(accidents) {
                     .split("_")
                     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
                     .join(" ");
-        // Add title attribute for tooltip on hover
         th.setAttribute("title", th.textContent);
         headerRow.appendChild(th);
     });
@@ -63,7 +61,6 @@ export function displayAccidents(accidents) {
                 if (column.includes("time") && value) {
                     value = new Date(value).toLocaleString();
                 }
-                // Add title attribute for full text on hover
                 td.textContent = value;
                 td.setAttribute("title", value);
             }
