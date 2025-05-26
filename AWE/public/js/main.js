@@ -9,10 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const startDate = document.getElementById("start_date")?.value;
         const endDate = document.getElementById("end_date")
             ?.value;
+        const state = document.getElementById("state")
+            ?.value;
+        const severity = document.getElementById("severity")?.value;
         try {
-<<<<<<< Updated upstream
-            const response = await fetch(`/api/accidents?start_date=${startDate}&end_date=${endDate}`);
-=======
             const queryParams = new URLSearchParams({
                 start_date: startDate,
                 end_date: endDate,
@@ -21,8 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 queryParams.append("state", state);
             if (severity !== "0")
                 queryParams.append("severity", severity);
-            const response = await fetch(`/api/accidents?${queryParams.toString()}`);
->>>>>>> Stashed changes
+            const response = await fetch(`/api/accidents?start_date=${startDate}&end_date=${endDate}`);
             if (!response.ok)
                 throw new Error("Network response was not ok");
             const accidents = await response.json();
