@@ -1,7 +1,5 @@
 import { initMap } from "./map.js";
 import { displayAccidents } from "./displayAccidents.js";
-import { updateCharts } from "../charts.js";
-
 document.addEventListener("DOMContentLoaded", () => {
     initMap("map");
     const severitySlider = document.getElementById("severity");
@@ -38,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 throw new Error("Network response was not ok");
             const accidents = await response.json();
             displayAccidents(accidents);
-            updateCharts(accidents);
         }
         catch (error) {
             console.error("Error:", error);
