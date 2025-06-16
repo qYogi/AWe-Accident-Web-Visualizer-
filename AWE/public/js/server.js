@@ -44,7 +44,7 @@ createServer(async (req, res) => {
                     query += ` AND severity = $${paramIndex++}`;
                     values.push(severity);
                 }
-                query += ` ORDER BY start_time DESC LIMIT 100`;
+                query += ` ORDER BY start_time DESC `;
                 const result = await pool.query(query, values);
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify(result.rows));

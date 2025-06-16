@@ -15,7 +15,6 @@ const PARTIALS_DIR = join(ROOT, "partials");
 const TEMPLATE_PATH = join(ROOT, "templates/index.template.html");
 const STATIC_DIR = join(ROOT, "public");
 
-// Hardcoded admin credentials
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "password123";
 const SESSIONS = new Set<string>();
@@ -68,7 +67,6 @@ createServer(async (req, res) => {
     const isLoggedIn =
       cookies["admin_session"] && SESSIONS.has(cookies["admin_session"]);
 
-    // Admin login page or dashboard
     if (pathname === "/admin" && req.method === "GET") {
       if (!isLoggedIn) {
         await servePartial(res, "admin-login.html");
@@ -78,7 +76,6 @@ createServer(async (req, res) => {
       return;
     }
 
-    // Admin login POST
     if (pathname === "/admin/login" && req.method === "POST") {
       let body = "";
       req.on("data", (chunk) => (body += chunk));
@@ -100,7 +97,6 @@ createServer(async (req, res) => {
       return;
     }
 
-    // Admin logout POST
     if (pathname === "/admin/logout" && req.method === "POST") {
       if (isLoggedIn) SESSIONS.delete(cookies["admin_session"]);
       res.writeHead(302, {
@@ -111,7 +107,6 @@ createServer(async (req, res) => {
       return;
     }
 
-    // Protect DB ops
     if (
       (pathname === "/admin/add" || pathname === "/admin/delete") &&
       req.method === "POST"
@@ -127,7 +122,6 @@ createServer(async (req, res) => {
         const form = parseForm(body);
         try {
           if (pathname === "/admin/add") {
-            // Collect all fields from the form
             const accident: any = {
               id: form.id,
               severity: Number(form.severity),
@@ -231,7 +225,7 @@ createServer(async (req, res) => {
           values.push(severity);
         }
 
-        query += ` ORDER BY start_time DESC `;
+        query += ` ORDER BY start_time DESC LIMIT 100`;
 
         const result = await pool.query(query, values);
         res.writeHead(200, { "Content-Type": "application/json" });
