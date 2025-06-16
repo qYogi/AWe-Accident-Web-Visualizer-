@@ -43,7 +43,7 @@ function parseForm(body: string) {
 
 async function getHtmlWithPartials() {
   let template = await readFile(TEMPLATE_PATH, "utf-8");
-  const partials = ["advanced-filter", "table"];
+  const partials = ["advanced-filter", "table", "charts"];
   for (const name of partials) {
     const content = await readFile(join(PARTIALS_DIR, `${name}.html`), "utf-8");
     template = template.replace(`{{partial ${name}}}`, content);
