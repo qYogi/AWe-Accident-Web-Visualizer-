@@ -12,14 +12,6 @@ export function displayAccidents(accidents: Accident[]) {
   tableHead.innerHTML = "";
   tableBody.innerHTML = "";
 
-  let message = document.getElementById("accidents-table-message");
-  if (!message) {
-    message = document.createElement("div");
-    message.id = "accidents-table-message";
-    tableHead.parentElement?.insertBefore(message, tableHead);
-  }
-  message.textContent = "For the full table, please download it.";
-
   const columns = [
     "id",
     "severity",
