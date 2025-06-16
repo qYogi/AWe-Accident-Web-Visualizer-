@@ -1,4 +1,5 @@
 import { setAccidents } from "./map.js";
+import updateCharts from "./charts.js";
 export function displayAccidents(accidents) {
     if (!accidents || accidents.length === 0)
         return;
@@ -46,4 +47,5 @@ export function displayAccidents(accidents) {
         tableBody.appendChild(row);
     });
     setAccidents(accidents);
+    updateCharts(accidents);
 }
