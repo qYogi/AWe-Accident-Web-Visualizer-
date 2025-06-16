@@ -1,0 +1,175 @@
+body {
+  background: #f4f6fb;
+  margin: 0;
+  padding: 0;
+}
+.admin-container {
+  max-width: 900px;
+  margin: 40px auto 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  padding: 32px 32px 24px 32px;
+}
+h2 {
+  text-align: center;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}
+h3 {
+  color: #1976d2;
+  font-weight: 600;
+  margin-bottom: 18px;
+  margin-top: 0;
+}
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  background: #f9f9f9;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+.admin-form-grid label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  margin-bottom: 0;
+  color: #333;
+}
+.admin-form-grid input[type="text"],
+.admin-form-grid input[type="number"],
+.admin-form-grid input[type="datetime-local"] {
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+}
+.admin-form-grid input[type="text"]:focus,
+.admin-form-grid input[type="number"]:focus,
+.admin-form-grid input[type="datetime-local"]:focus {
+  border: 1.5px solid #1976d2;
+  outline: none;
+}
+.admin-form-grid input[type="checkbox"] {
+  margin-top: 8px;
+  width: 18px;
+  height: 18px;
+}
+.admin-form-grid button[type="submit"] {
+  grid-column: 1 / -1;
+  padding: 12px 0;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+}
+.admin-form-grid button[type="submit"]:hover {
+  background: #125ea2;
+}
+
+.admin-action-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.admin-action-form input[type="text"] {
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1em;
+  background: #fff;
+}
+.admin-action-form button {
+  padding: 8px 18px;
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+}
+.admin-action-form button:hover {
+  background: #b71c1c;
+}
+.logout-form button {
+  background: #888;
+}
+.logout-form button:hover {
+  background: #444;
+}
+
+/* Login*/
+.admin-login-container {
+  max-width: 400px;
+  margin: 80px auto 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  padding: 32px 32px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-login-container h2 {
+  text-align: center;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+.admin-login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.admin-login-form label {
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.admin-login-form input[type="text"],
+.admin-login-form input[type="password"] {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1em;
+  background: #fff;
+  transition: border 0.2s;
+}
+.admin-login-form input[type="text"]:focus,
+.admin-login-form input[type="password"]:focus {
+  border: 1.5px solid #1976d2;
+  outline: none;
+}
+.admin-login-form button[type="submit"] {
+  padding: 12px 0;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.07);
+}
+.admin-login-form button[type="submit"]:hover {
+  background: #125ea2;
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/style-admin.css" />
+  </head>
+  <body>
+    <div class="admin-container">
+      <h2>Admin Dashboard</h2>
+      <form method="POST" action="/admin/add">
+        <h3>Add Accident</h3>
+        <div class="admin-form-grid">
+          <label>ID*<input type="text" name="id" required /></label>
+          <label
+            >Severity*<input type="number" name="severity" required
+          /></label>
+          <label
+            >Start Time*<input type="datetime-local" name="start_time" required
+          /></label>
+          <label
+            >End Time*<input type="datetime-local" name="end_time" required
+          /></label>
+          <label
+            >Start Lat*<input
+              type="number"
+              step="any"
+              name="start_lat"
+              required
+          /></label>
+          <label
+            >Start Lng*<input
+              type="number"
+              step="any"
+              name="start_lng"
+              required
+          /></label>
+          <label
+            >End Lat<input type="number" step="any" name="end_lat"
+          /></label>
+          <label
+            >End Lng<input type="number" step="any" name="end_lng"
+          /></label>
+          <label
+            >Distance (mi)<input type="number" step="any" name="distance_mi"
+          /></label>
+          <label>Description<input type="text" name="description" /></label>
+          <label>Street*<input type="text" name="street" required /></label>
+          <label>City*<input type="text" name="city" required /></label>
+          <label>County*<input type="text" name="county" required /></label>
+          <label>State*<input type="text" name="state" required /></label>
+          <label>Zipcode<input type="text" name="zipcode" /></label>
+          <label>Country*<input type="text" name="country" required /></label>
+          <label>Timezone<input type="text" name="timezone" /></label>
+          <label>Airport Code<input type="text" name="airport_code" /></label>
+          <label
+            >Weather Timestamp<input
+              type="datetime-local"
+              name="weather_timestamp"
+          /></label>
+          <label
+            >Temperature (F)<input
+              type="number"
+              step="any"
+              name="temperature_f"
+          /></label>
+          <label
+            >Wind Chill (F)<input type="number" step="any" name="wind_chill_f"
+          /></label>
+          <label
+            >Humidity (%)<input
+              type="number"
+              step="any"
+              name="humidity_percent"
+          /></label>
+          <label
+            >Pressure (in)<input type="number" step="any" name="pressure_in"
+          /></label>
+          <label
+            >Visibility (mi)<input
+              type="number"
+              step="any"
+              name="visibility_mi"
+          /></label>
+          <label
+            >Wind Direction<input type="text" name="wind_direction"
+          /></label>
+          <label
+            >Wind Speed (mph)<input
+              type="number"
+              step="any"
+              name="wind_speed_mph"
+          /></label>
+          <label
+            >Precipitation (in)<input
+              type="number"
+              step="any"
+              name="precipitation_in"
+          /></label>
+          <label
+            >Weather Condition<input type="text" name="weather_condition"
+          /></label>
+          <label
+            >Amenity<input type="checkbox" name="amenity" value="true"
+          /></label>
+          <label>Bump<input type="checkbox" name="bump" value="true" /></label>
+          <label
+            >Crossing<input type="checkbox" name="crossing" value="true"
+          /></label>
+          <label
+            >Give Way<input type="checkbox" name="give_way" value="true"
+          /></label>
+          <label
+            >Junction<input type="checkbox" name="junction" value="true"
+          /></label>
+          <label
+            >No Exit<input type="checkbox" name="no_exit" value="true"
+          /></label>
+          <label
+            >Railway<input type="checkbox" name="railway" value="true"
+          /></label>
+          <label
+            >Roundabout<input type="checkbox" name="roundabout" value="true"
+          /></label>
+          <label
+            >Station<input type="checkbox" name="station" value="true"
+          /></label>
+          <label>Stop<input type="checkbox" name="stop" value="true" /></label>
+          <label
+            >Traffic Calming<input
+              type="checkbox"
+              name="traffic_calming"
+              value="true"
+          /></label>
+          <label
+            >Traffic Signal<input
+              type="checkbox"
+              name="traffic_signal"
+              value="true"
+          /></label>
+          <label
+            >Turning Loop<input
+              type="checkbox"
+              name="turning_loop"
+              value="true"
+          /></label>
+          <label
+            >Sunrise/Sunset<input type="text" name="sunrise_sunset"
+          /></label>
+          <label
+            >Civil Twilight<input type="text" name="civil_twilight"
+          /></label>
+          <label
+            >Nautical Twilight<input type="text" name="nautical_twilight"
+          /></label>
+          <label
+            >Astronomical Twilight<input
+              type="text"
+              name="astronomical_twilight"
+          /></label>
+          <button type="submit">Add</button>
+        </div>
+      </form>
+      <form method="POST" action="/admin/delete" class="admin-action-form">
+        <h3
+          style="
+            margin: 0 0 0 0;
+            color: #e53935;
+            font-size: 1.1em;
+            font-weight: 600;
+          "
+        >
+          Delete Record
+        </h3>
+        <input type="text" name="id" placeholder="ID" required />
+        <button type="submit">Delete</button>
+      </form>
+      <form
+        method="POST"
+        action="/admin/logout"
+        class="admin-action-form logout-form"
+      >
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </body>
+</html>
