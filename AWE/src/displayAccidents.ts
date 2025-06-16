@@ -1,6 +1,6 @@
 import type { Accident } from "./types/types.js";
-import { extractActiveFlags } from "./utils/flags.js";
 import { setAccidents } from "./map.js";
+import updateCharts from "./charts.js";
 
 export function displayAccidents(accidents: Accident[]) {
   if (!accidents || accidents.length === 0) return;
@@ -53,4 +53,5 @@ export function displayAccidents(accidents: Accident[]) {
   });
 
   setAccidents(accidents);
+  updateCharts(accidents);
 }
