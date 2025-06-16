@@ -12,49 +12,26 @@ export function displayAccidents(accidents: Accident[]) {
   tableHead.innerHTML = "";
   tableBody.innerHTML = "";
 
-  const table = document.getElementById("accidents-table");
-  if (table) {
-    table.style.width = "100%";
-  }
-
-  const flagColumns = [
-    "amenity",
-    "bump",
-    "crossing",
-    "give_way",
-    "junction",
-    "no_exit",
-    "railway",
-    "roundabout",
-    "station",
-    "stop",
-    "traffic_calming",
-    "traffic_signal",
-    "turning_loop",
+  const columns = [
+    "id",
+    "severity",
+    "start_time",
+    "end_time",
+    "description",
+    "street",
+    "city",
+    "county",
+    "state",
+    "country",
   ];
-
-  const firstAccident = accidents[0];
-  let columns = Object.keys(firstAccident).filter(
-    (col) => !flagColumns.includes(col.toLowerCase())
-  );
-
-  const hasFlags = flagColumns.some((flag) =>
-    Object.keys(firstAccident).some((col) => col.toLowerCase() === flag)
-  );
-
-  if (hasFlags) columns.push("flags");
 
   const headerRow = document.createElement("tr");
   columns.forEach((column) => {
     const th = document.createElement("th");
-    th.textContent =
-      column === "flags"
-        ? "Flags"
-        : column
-            .split("_")
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(" ");
-
+    th.textContent = column
+      .split("_")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
     th.setAttribute("title", th.textContent);
     headerRow.appendChild(th);
   });
@@ -62,27 +39,16 @@ export function displayAccidents(accidents: Accident[]) {
 
   accidents.forEach((accident) => {
     const row = document.createElement("tr");
-
     columns.forEach((column) => {
       const td = document.createElement("td");
-
-      if (column === "flags") {
-        const flagsText = extractActiveFlags(accident, flagColumns).join(", ");
-        td.textContent = flagsText;
-        td.setAttribute("title", flagsText);
-      } else {
-        let value = accident[column as keyof Accident] || "";
-        if (column.includes("time") && value) {
-          value = new Date(value as string).toLocaleString();
-        }
-
-        td.textContent = value as string;
-        td.setAttribute("title", value as string);
+      let value = accident[column as keyof Accident] || "";
+      if (column.includes("time") && value) {
+        value = new Date(value as string).toLocaleString();
       }
-
+      td.textContent = value as string;
+      td.setAttribute("title", value as string);
       row.appendChild(td);
     });
-
     tableBody.appendChild(row);
   });
 

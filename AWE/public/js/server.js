@@ -33,7 +33,7 @@ createServer(async (req, res) => {
                 return;
             }
             try {
-                let query = `SELECT * FROM accidents WHERE start_time BETWEEN $1 AND $2`;
+                let query = `SELECT id, severity, start_time, end_time, description, street, city, county, state, country, start_lat, start_lng FROM accidents WHERE start_time BETWEEN $1 AND $2`;
                 const values = [startDate, endDate];
                 let paramIndex = 3;
                 if (state) {
