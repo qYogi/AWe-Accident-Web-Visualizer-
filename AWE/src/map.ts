@@ -9,7 +9,7 @@ export function initMap(mapId: string, options?: L.MapOptions) {
   if (map) return;
 
   map = L.map(mapId, options);
-  map.setView([37.7749, -122.4194], 13);
+  map.setView([39.82, -98.58], 5);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:

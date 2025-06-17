@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     noResultsMessage.classList.remove("hidden");
                 if (chartsSection)
                     chartsSection.classList.add("hidden");
-                displayAccidents([]); // Clear previous results if any
+                displayAccidents([]);
             }
             else {
                 displayAccidents(accidents);
