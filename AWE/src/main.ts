@@ -48,7 +48,22 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         if (!response.ok) throw new Error("Network response was not ok");
         const accidents = await response.json();
-        displayAccidents(accidents);
+
+        const resultsSection = document.getElementById("results");
+        const chartsSection = document.getElementById("charts");
+        const noResultsMessage = document.getElementById("no-results-message");
+
+        if (accidents.length === 0) {
+          if (resultsSection) resultsSection.classList.add("hidden");
+          if (noResultsMessage) noResultsMessage.classList.remove("hidden");
+          if (chartsSection) chartsSection.classList.add("hidden");
+          displayAccidents([]);
+        } else {
+          displayAccidents(accidents);
+          if (resultsSection) resultsSection.classList.remove("hidden");
+          if (chartsSection) chartsSection.classList.remove("hidden");
+          if (noResultsMessage) noResultsMessage.classList.add("hidden");
+        }
       } catch (error) {
         console.error("Error:", error);
         alert("Error fetching accident data");

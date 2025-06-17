@@ -19,9 +19,16 @@
     <div class="layout">
       <aside id="filters">{{partial advanced-filter}}</aside>
       <main class="right-panel">
-        <section id="results">{{partial table}}</section>
+        <p
+          id="no-results-message"
+          class="hidden"
+          style="text-align: center; padding: 20px"
+        >
+          No accidents found for the selected criteria.
+        </p>
+        <section id="results" class="hidden">{{partial table}}</section>
         <section id="map" style="height: 500px"></section>
-        {{partial charts}}
+        <section id="charts" class="hidden">{{partial charts}}</section>
       </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>

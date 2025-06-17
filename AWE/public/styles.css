@@ -152,3 +152,7 @@ button:hover {
 .table-container {
   margin: 1rem;
 }
+
+.hidden {
+  display: none !important;
+}
