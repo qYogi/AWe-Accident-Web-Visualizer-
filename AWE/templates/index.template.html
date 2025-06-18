@@ -19,16 +19,26 @@
     <div class="layout">
       <aside id="filters">{{partial advanced-filter}}</aside>
       <main class="right-panel">
-        <p
-          id="no-results-message"
-          class="hidden"
-          style="text-align: center; padding: 20px"
-        >
-          No accidents found for the selected criteria.
-        </p>
-        <section id="results" class="hidden">{{partial table}}</section>
-        <section id="map" style="height: 500px"></section>
-        <section id="charts" class="hidden">{{partial charts}}</section>
+        <header>
+          <h1 class="title-header">Welcome to AWE</h1>
+          <p class="parahraph-header">
+            AWE - Accident Web Visualizer is a tool made to explore, filter, and
+            visualize accident data through interactive tables, maps, and
+            charts.
+          </p>
+        </header>
+        <div class="right-panel-container">
+          <p
+            id="no-results-message"
+            class="hidden"
+            style="text-align: center; padding: 20px"
+          >
+            No accidents found for the selected criteria.
+          </p>
+          <section id="results" class="hidden">{{partial table}}</section>
+          <section id="map" style="height: 500px"></section>
+          <section id="charts" class="hidden">{{partial charts}}</section>
+        </div>
       </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
