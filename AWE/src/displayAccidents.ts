@@ -2,7 +2,28 @@ import type { Accident } from "./types/types.js";
 import { setAccidents } from "./map.js";
 import updateCharts from "./charts.js";
 
-export function displayAccidents(accidents: Accident[]) {
+export function displayAccidents(accidents: Accident[] | { error: string; missingCities?: string[] }) {
+  if (typeof accidents === 'object' && 'error' in accidents) {
+    const tableHead = document.querySelector("#accidents-table-head");
+    const tableBody = document.querySelector("#accidents-table tbody");
+    if (!tableHead || !tableBody) return;
+
+    tableHead.innerHTML = "";
+    tableBody.innerHTML = "";
+
+    const errorRow = document.createElement("tr");
+    const errorCell = document.createElement("td");
+    errorCell.colSpan = 10;
+    errorCell.style.cssText = "text-align: center; color: #e15759; font-weight: bold; padding: 2rem;";
+    errorCell.textContent = accidents.error;
+    errorRow.appendChild(errorCell);
+    tableBody.appendChild(errorRow);
+
+    setAccidents([]);
+    updateCharts([]);
+    return;
+  }
+
   if (!accidents || accidents.length === 0) return;
 
   const tableHead = document.querySelector("#accidents-table-head");
