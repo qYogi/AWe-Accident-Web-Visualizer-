@@ -5,17 +5,25 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #f5f5f5;
   width: 100%;
   overflow: hidden;
+}
+
+.title-header {
+  margin: 0;
+}
+
+.title-header,
+h1 {
+  font-size: 4rem;
+  margin: 1rem;
 }
 
 .layout {
   display: grid;
   grid-template-columns: 1fr 5fr;
-  gap: 1rem;
   padding: 8px;
-  background-color: #f5f5f5;
+  background-color: #eeefe0;
   margin: 0 auto;
   max-height: 100dvh;
   height: 100dvh;
@@ -23,7 +31,7 @@ body {
 }
 
 #filters {
-  background: white;
+  background: #819a91;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 2rem;
@@ -35,9 +43,6 @@ body {
   height: 100%;
   min-height: 0;
   overflow-x: hidden;
-  overflow-y: auto;
-  flex: 1;
-  gap: 1rem;
 }
 
 #results,
@@ -52,7 +57,7 @@ body {
 }
 
 #results {
-  min-height: 350px;
+  min-height: 45rem;
 }
 
 #map {
@@ -100,8 +105,8 @@ input[type="date"] {
 }
 
 button {
-  background-color: #4caf50;
-  color: white;
+  background-color: #a7c1a8;
+  color: #333;
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
@@ -155,4 +160,13 @@ button:hover {
 
 .hidden {
   display: none !important;
+}
+
+.right-panel-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 1rem;
+  margin: 0rem 1rem;
 }
