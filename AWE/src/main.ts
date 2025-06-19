@@ -1,5 +1,17 @@
 import { initMap } from "./map.js";
 import { displayAccidents } from "./displayAccidents.js";
+import {
+  selectedStates,
+  selectedCities,
+  addCity,
+  removeCity,
+  handleStateChange,
+  removeState,
+} from "./filters.js";
+import {
+  updateSelectedStatesDisplay,
+  updateSelectedCitiesDisplay,
+} from "./uiHelpers.js";
 
 function pad(n: number): string {
   return n < 10 ? "0" + n : n.toString();
@@ -57,101 +69,14 @@ function populateDateTimeDropdowns() {
   (document.getElementById("end_minute") as HTMLSelectElement).value = pad(59);
 }
 
-const selectedStates = new Set<string>();
-const selectedCities = new Set<string>();
-
-function updateSelectedStatesDisplay() {
-  const statesList = document.getElementById("states-list") as HTMLDivElement;
-  const selectedStatesDiv = document.getElementById(
-    "selected-states"
-  ) as HTMLDivElement;
-
-  if (selectedStates.size > 0) {
-    statesList.innerHTML = "";
-    selectedStates.forEach((stateCode) => {
-      const stateOption = document.querySelector(
-        `#state option[value="${stateCode}"]`
-      ) as HTMLOptionElement;
-      const stateName = stateOption ? stateOption.textContent : stateCode;
-
-      const stateTag = document.createElement("div");
-      stateTag.style.cssText =
-        "background: #4e79a7; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; display: flex; align-items: center; gap: 0.5rem;";
-      stateTag.innerHTML = `
-        <span>✓ ${stateName}</span>
-        <button type="button" onclick="removeState('${stateCode}')" style="background: none; border: none; color: white; cursor: pointer; font-weight: bold;">×</button>
-      `;
-      statesList.appendChild(stateTag);
-    });
-    selectedStatesDiv.style.display = "block";
-  } else {
-    selectedStatesDiv.style.display = "none";
-  }
-}
-
-function updateSelectedCitiesDisplay() {
-  const citiesList = document.getElementById("cities-list") as HTMLDivElement;
-
-  citiesList.innerHTML = "";
-  selectedCities.forEach((city) => {
-    const cityTag = document.createElement("div");
-    cityTag.style.cssText =
-      "background: #f28e2b; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; display: flex; align-items: center; gap: 0.5rem;";
-    cityTag.innerHTML = `
-      <span>${city}</span>
-      <button type="button" onclick="removeCity('${city}')" style="background: none; border: none; color: white; cursor: pointer; font-weight: bold;">×</button>
-    `;
-    citiesList.appendChild(cityTag);
-  });
-}
-
-function handleStateChange() {
-  const stateSelect = document.getElementById("state") as HTMLSelectElement;
-  const cityInputSection = document.getElementById(
-    "city-input-section"
-  ) as HTMLDivElement;
-
-  if (stateSelect.value && !selectedStates.has(stateSelect.value)) {
-    selectedStates.add(stateSelect.value);
-    updateSelectedStatesDisplay();
-    cityInputSection.style.display = "block";
-  }
-
-  stateSelect.value = "";
-}
-
-function addCity(cityName: string) {
-  if (cityName.trim() && !selectedCities.has(cityName.trim())) {
-    selectedCities.add(cityName.trim());
-    updateSelectedCitiesDisplay();
-  }
-}
-
-function removeState(stateCode: string) {
-  selectedStates.delete(stateCode);
-  updateSelectedStatesDisplay();
-
-  if (selectedStates.size === 0) {
-    const cityInputSection = document.getElementById(
-      "city-input-section"
-    ) as HTMLDivElement;
-    cityInputSection.style.display = "none";
-    selectedCities.clear();
-    updateSelectedCitiesDisplay();
-  }
-}
-
-function removeCity(cityName: string) {
-  selectedCities.delete(cityName);
-  updateSelectedCitiesDisplay();
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   initMap("map");
   populateDateTimeDropdowns();
 
   const stateSelect = document.getElementById("state") as HTMLSelectElement;
-  stateSelect.addEventListener("change", handleStateChange);
+  stateSelect.addEventListener("change", () =>
+    handleStateChange(updateSelectedStatesDisplay, updateSelectedCitiesDisplay)
+  );
 
   const cityInput = document.getElementById("city-input") as HTMLInputElement;
   cityInput.addEventListener("keypress", (e) => {
@@ -159,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const cityName = cityInput.value.trim();
       if (cityName) {
-        addCity(cityName);
+        addCity(cityName, updateSelectedCitiesDisplay);
         cityInput.value = "";
       }
     }
@@ -250,7 +175,13 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Error fetching accident data");
       }
     });
-});
 
-(window as any).removeState = removeState;
-(window as any).removeCity = removeCity;
+  (window as any).removeState = (stateCode: string) =>
+    removeState(
+      stateCode,
+      updateSelectedStatesDisplay,
+      updateSelectedCitiesDisplay
+    );
+  (window as any).removeCity = (cityName: string) =>
+    removeCity(cityName, updateSelectedCitiesDisplay);
+});
