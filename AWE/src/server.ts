@@ -25,6 +25,229 @@ const ADMIN_USER = "admin";
 const ADMIN_PASS = "password123";
 const SESSIONS = new Set<string>();
 
+// Route Handlers
+async function handleAdminGet(req: any, res: any, isLoggedIn: boolean) {
+  if (!isLoggedIn) {
+    await servePartial(res, "admin-login.html", PARTIALS_DIR);
+  } else {
+    await servePartial(res, "admin-dashboard.html", PARTIALS_DIR);
+  }
+}
+
+function handleAdminLogin(req: any, res: any) {
+  let body = "";
+  req.on("data", (chunk: any) => (body += chunk));
+  req.on("end", () => {
+    const form = parseForm(body);
+    if (form.username === ADMIN_USER && form.password === ADMIN_PASS) {
+      const token = randomBytes(16).toString("hex");
+      SESSIONS.add(token);
+      res.writeHead(302, {
+        "Set-Cookie": `admin_session=${token}; HttpOnly; Path=/`,
+        Location: "/admin",
+      });
+      res.end();
+    } else {
+      res.writeHead(401);
+      res.end("Invalid credentials");
+    }
+  });
+}
+
+function handleAdminLogout(
+  req: any,
+  res: any,
+  cookies: Record<string, string>,
+  isLoggedIn: boolean
+) {
+  if (isLoggedIn) SESSIONS.delete(cookies["admin_session"]);
+  res.writeHead(302, {
+    "Set-Cookie": `admin_session=; HttpOnly; Path=/; Max-Age=0`,
+    Location: "/admin",
+  });
+  res.end();
+}
+
+function handleAdminAddDelete(
+  req: any,
+  res: any,
+  pathname: string,
+  isLoggedIn: boolean
+) {
+  if (!isLoggedIn) {
+    res.writeHead(403);
+    res.end("Forbidden");
+    return;
+  }
+  let body = "";
+  req.on("data", (chunk: any) => (body += chunk));
+  req.on("end", async () => {
+    const form = parseForm(body);
+    try {
+      if (pathname === "/admin/add") {
+        const accident: any = {
+          id: form.id,
+          severity: Number(form.severity),
+          start_time: form.start_time,
+          end_time: form.end_time,
+          start_lat: Number(form.start_lat),
+          start_lng: form.start_lng ? Number(form.start_lng) : null,
+          end_lat: form.end_lat ? Number(form.end_lat) : null,
+          end_lng: form.end_lng ? Number(form.end_lng) : null,
+          distance_mi: form.distance_mi ? Number(form.distance_mi) : null,
+          description: form.description || null,
+          street: form.street,
+          city: form.city,
+          county: form.county || null,
+          state: form.state,
+          zipcode: form.zipcode || null,
+          country: form.country,
+          timezone: form.timezone || null,
+          airport_code: form.airport_code || null,
+          weather_timestamp: form.weather_timestamp || null,
+          temperature_f: form.temperature_f ? Number(form.temperature_f) : null,
+          wind_chill_f: form.wind_chill_f ? Number(form.wind_chill_f) : null,
+          humidity_percent: form.humidity_percent
+            ? Number(form.humidity_percent)
+            : null,
+          pressure_in: form.pressure_in ? Number(form.pressure_in) : null,
+          visibility_mi: form.visibility_mi ? Number(form.visibility_mi) : null,
+          wind_direction: form.wind_direction || null,
+          wind_speed_mph: form.wind_speed_mph
+            ? Number(form.wind_speed_mph)
+            : null,
+          precipitation_in: form.precipitation_in
+            ? Number(form.precipitation_in)
+            : null,
+          weather_condition: form.weather_condition || null,
+          amenity: form.amenity === "true" ? true : false,
+          bump: form.bump === "true" ? true : false,
+          crossing: form.crossing === "true" ? true : false,
+          give_way: form.give_way === "true" ? true : false,
+          junction: form.junction === "true" ? true : false,
+          no_exit: form.no_exit === "true" ? true : false,
+          railway: form.railway === "true" ? true : false,
+          roundabout: form.roundabout === "true" ? true : false,
+          station: form.station === "true" ? true : false,
+          stop: form.stop === "true" ? true : false,
+          traffic_calming: form.traffic_calming === "true" ? true : false,
+          traffic_signal: form.traffic_signal === "true" ? true : false,
+          turning_loop: form.turning_loop === "true" ? true : false,
+          sunrise_sunset: form.sunrise_sunset || null,
+          civil_twilight: form.civil_twilight || null,
+          nautical_twilight: form.nautical_twilight || null,
+          astronomical_twilight: form.astronomical_twilight || null,
+        };
+        await addAccident(accident);
+        res.writeHead(302, { Location: "/admin" });
+        res.end();
+      } else if (pathname === "/admin/delete") {
+        await deleteAccident(form.id);
+        res.writeHead(302, { Location: "/admin" });
+        res.end();
+      }
+    } catch (e) {
+      res.writeHead(500);
+      res.end("DB error: " + (e as Error).message);
+    }
+  });
+}
+
+async function handleApiAccidents(
+  req: any,
+  res: any,
+  searchParams: URLSearchParams
+) {
+  const startDate = searchParams.get("start_date");
+  const endDate = searchParams.get("end_date");
+  const states = searchParams.getAll("state");
+  const cities = searchParams.getAll("city");
+  const severity = searchParams.get("severity");
+
+  if (!startDate || !endDate) {
+    res.writeHead(400);
+    res.end("Start date and end date are required");
+    return;
+  }
+
+  try {
+    let query = `SELECT * FROM accidents WHERE start_time BETWEEN $1 AND $2`;
+    const values = [startDate, endDate];
+    let paramIndex = 3;
+
+    if (states.length > 0) {
+      const statePlaceholders = states.map(() => `$${paramIndex++}`).join(",");
+      query += ` AND state IN (${statePlaceholders})`;
+      values.push(...states);
+    }
+
+    if (cities.length > 0) {
+      const cityPlaceholders = cities.map(() => `$${paramIndex++}`).join(",");
+      query += ` AND city IN (${cityPlaceholders})`;
+      values.push(...cities);
+    }
+
+    if (severity) {
+      query += ` AND severity = $${paramIndex++}`;
+      values.push(severity);
+    }
+
+    query += ` ORDER BY start_time DESC`;
+
+    const result = await pool.query(query, values);
+
+    if (cities.length > 0) {
+      const foundCities = new Set(result.rows.map((row) => row.city));
+      const missingCities = cities.filter((city) => !foundCities.has(city));
+
+      if (missingCities.length > 0 && result.rows.length === 0) {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            error: `The city selected doesn't exist in the state selected.`,
+            missingCities: missingCities,
+          })
+        );
+        return;
+      }
+    }
+
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(result.rows));
+  } catch (error) {
+    console.error("Database error:", error);
+    res.writeHead(500);
+    res.end("Error querying database");
+  }
+}
+
+async function handleRoot(req: any, res: any) {
+  const html = await getHtmlWithPartials(TEMPLATE_PATH, PARTIALS_DIR);
+  res.writeHead(200, { "Content-Type": "text/html" });
+  res.end(html);
+}
+
+async function handleStaticFile(req: any, res: any, pathname: string) {
+  const filePath = join(STATIC_DIR, pathname);
+  try {
+    const content = await readFile(filePath);
+    const ext = extname(filePath);
+    const mime =
+      {
+        ".js": "text/javascript",
+        ".css": "text/css",
+        ".json": "application/json",
+      }[ext] || "application/octet-stream";
+
+    res.writeHead(200, { "Content-Type": mime });
+    res.end(content);
+  } catch {
+    res.writeHead(404);
+    res.end("Not Found");
+  }
+}
+
+// Main server logic
 createServer(async (req, res) => {
   try {
     const { pathname, searchParams } = new URL(
@@ -36,42 +259,17 @@ createServer(async (req, res) => {
       cookies["admin_session"] && SESSIONS.has(cookies["admin_session"]);
 
     if (pathname === "/admin" && req.method === "GET") {
-      if (!isLoggedIn) {
-        await servePartial(res, "admin-login.html", PARTIALS_DIR);
-      } else {
-        await servePartial(res, "admin-dashboard.html", PARTIALS_DIR);
-      }
+      await handleAdminGet(req, res, Boolean(isLoggedIn));
       return;
     }
 
     if (pathname === "/admin/login" && req.method === "POST") {
-      let body = "";
-      req.on("data", (chunk) => (body += chunk));
-      req.on("end", () => {
-        const form = parseForm(body);
-        if (form.username === ADMIN_USER && form.password === ADMIN_PASS) {
-          const token = randomBytes(16).toString("hex");
-          SESSIONS.add(token);
-          res.writeHead(302, {
-            "Set-Cookie": `admin_session=${token}; HttpOnly; Path=/`,
-            Location: "/admin",
-          });
-          res.end();
-        } else {
-          res.writeHead(401);
-          res.end("Invalid credentials");
-        }
-      });
+      handleAdminLogin(req, res);
       return;
     }
 
     if (pathname === "/admin/logout" && req.method === "POST") {
-      if (isLoggedIn) SESSIONS.delete(cookies["admin_session"]);
-      res.writeHead(302, {
-        "Set-Cookie": `admin_session=; HttpOnly; Path=/; Max-Age=0`,
-        Location: "/admin",
-      });
-      res.end();
+      handleAdminLogout(req, res, cookies, Boolean(isLoggedIn));
       return;
     }
 
@@ -79,185 +277,21 @@ createServer(async (req, res) => {
       (pathname === "/admin/add" || pathname === "/admin/delete") &&
       req.method === "POST"
     ) {
-      if (!isLoggedIn) {
-        res.writeHead(403);
-        res.end("Forbidden");
-        return;
-      }
-      let body = "";
-      req.on("data", (chunk) => (body += chunk));
-      req.on("end", async () => {
-        const form = parseForm(body);
-        try {
-          if (pathname === "/admin/add") {
-            const accident: any = {
-              id: form.id,
-              severity: Number(form.severity),
-              start_time: form.start_time,
-              end_time: form.end_time,
-              start_lat: Number(form.start_lat),
-              start_lng: form.start_lng ? Number(form.start_lng) : null,
-              end_lat: form.end_lat ? Number(form.end_lat) : null,
-              end_lng: form.end_lng ? Number(form.end_lng) : null,
-              distance_mi: form.distance_mi ? Number(form.distance_mi) : null,
-              description: form.description || null,
-              street: form.street,
-              city: form.city,
-              county: form.county || null,
-              state: form.state,
-              zipcode: form.zipcode || null,
-              country: form.country,
-              timezone: form.timezone || null,
-              airport_code: form.airport_code || null,
-              weather_timestamp: form.weather_timestamp || null,
-              temperature_f: form.temperature_f
-                ? Number(form.temperature_f)
-                : null,
-              wind_chill_f: form.wind_chill_f
-                ? Number(form.wind_chill_f)
-                : null,
-              humidity_percent: form.humidity_percent
-                ? Number(form.humidity_percent)
-                : null,
-              pressure_in: form.pressure_in ? Number(form.pressure_in) : null,
-              visibility_mi: form.visibility_mi
-                ? Number(form.visibility_mi)
-                : null,
-              wind_direction: form.wind_direction || null,
-              wind_speed_mph: form.wind_speed_mph
-                ? Number(form.wind_speed_mph)
-                : null,
-              precipitation_in: form.precipitation_in
-                ? Number(form.precipitation_in)
-                : null,
-              weather_condition: form.weather_condition || null,
-              amenity: form.amenity === "true" ? true : false,
-              bump: form.bump === "true" ? true : false,
-              crossing: form.crossing === "true" ? true : false,
-              give_way: form.give_way === "true" ? true : false,
-              junction: form.junction === "true" ? true : false,
-              no_exit: form.no_exit === "true" ? true : false,
-              railway: form.railway === "true" ? true : false,
-              roundabout: form.roundabout === "true" ? true : false,
-              station: form.station === "true" ? true : false,
-              stop: form.stop === "true" ? true : false,
-              traffic_calming: form.traffic_calming === "true" ? true : false,
-              traffic_signal: form.traffic_signal === "true" ? true : false,
-              turning_loop: form.turning_loop === "true" ? true : false,
-              sunrise_sunset: form.sunrise_sunset || null,
-              civil_twilight: form.civil_twilight || null,
-              nautical_twilight: form.nautical_twilight || null,
-              astronomical_twilight: form.astronomical_twilight || null,
-            };
-            await addAccident(accident);
-            res.writeHead(302, { Location: "/admin" });
-            res.end();
-          } else if (pathname === "/admin/delete") {
-            await deleteAccident(form.id);
-            res.writeHead(302, { Location: "/admin" });
-            res.end();
-          }
-        } catch (e) {
-          res.writeHead(500);
-          res.end("DB error: " + (e as Error).message);
-        }
-      });
+      handleAdminAddDelete(req, res, pathname, Boolean(isLoggedIn));
       return;
     }
 
     if (pathname === "/api/accidents") {
-      const startDate = searchParams.get("start_date");
-      const endDate = searchParams.get("end_date");
-      const states = searchParams.getAll("state");
-      const cities = searchParams.getAll("city");
-      const severity = searchParams.get("severity");
-
-      if (!startDate || !endDate) {
-        res.writeHead(400);
-        res.end("Start date and end date are required");
-        return;
-      }
-
-      try {
-        let query = `SELECT * FROM accidents WHERE start_time BETWEEN $1 AND $2`;
-        const values = [startDate, endDate];
-        let paramIndex = 3;
-
-        if (states.length > 0) {
-          const statePlaceholders = states
-            .map(() => `$${paramIndex++}`)
-            .join(",");
-          query += ` AND state IN (${statePlaceholders})`;
-          values.push(...states);
-        }
-
-        if (cities.length > 0) {
-          const cityPlaceholders = cities
-            .map(() => `$${paramIndex++}`)
-            .join(",");
-          query += ` AND city IN (${cityPlaceholders})`;
-          values.push(...cities);
-        }
-
-        if (severity) {
-          query += ` AND severity = $${paramIndex++}`;
-          values.push(severity);
-        }
-
-        query += ` ORDER BY start_time DESC`;
-
-        const result = await pool.query(query, values);
-
-        if (cities.length > 0) {
-          const foundCities = new Set(result.rows.map((row: any) => row.city));
-          const missingCities = cities.filter((city) => !foundCities.has(city));
-
-          if (missingCities.length > 0 && result.rows.length === 0) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(
-              JSON.stringify({
-                error: `The city selected doesn't exist in the state selected.`,
-                missingCities: missingCities,
-              })
-            );
-            return;
-          }
-        }
-
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(result.rows));
-      } catch (error) {
-        console.error("Database error:", error);
-        res.writeHead(500);
-        res.end("Error querying database");
-      }
+      await handleApiAccidents(req, res, searchParams);
       return;
     }
 
     if (pathname === "/" || pathname === "/index.template.html") {
-      const html = await getHtmlWithPartials(TEMPLATE_PATH, PARTIALS_DIR);
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(html);
+      await handleRoot(req, res);
       return;
     }
 
-    const filePath = join(STATIC_DIR, pathname);
-    try {
-      const content = await readFile(filePath);
-      const ext = extname(filePath);
-      const mime =
-        {
-          ".js": "text/javascript",
-          ".css": "text/css",
-          ".json": "application/json",
-        }[ext] || "application/octet-stream";
-
-      res.writeHead(200, { "Content-Type": mime });
-      res.end(content);
-    } catch {
-      res.writeHead(404);
-      res.end("Not Found");
-    }
+    await handleStaticFile(req, res, pathname);
   } catch (error) {
     console.error(error);
     res.writeHead(500);
