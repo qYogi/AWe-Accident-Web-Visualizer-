@@ -10,7 +10,7 @@ export function removeCity(cityName, updateSelectedCitiesDisplay) {
     selectedCities.delete(cityName);
     updateSelectedCitiesDisplay();
 }
-export function handleStateChange(updateSelectedStatesDisplay, updateSelectedCitiesDisplay) {
+export function handleStateChange(updateSelectedStatesDisplay, _updateSelectedCitiesDisplay) {
     const stateSelect = document.getElementById("state");
     const cityInputSection = document.getElementById("city-input-section");
     if (stateSelect.value && !selectedStates.has(stateSelect.value)) {
