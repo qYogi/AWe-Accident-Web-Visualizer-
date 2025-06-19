@@ -12,6 +12,9 @@ import {
   updateSelectedStatesDisplay,
   updateSelectedCitiesDisplay,
 } from "./uiHelpers.js";
+import { exportAccidentsToCSV } from "./exportTable.js";
+
+let lastFullAccidents: any[] = [];
 
 function pad(n: number): string {
   return n < 10 ? "0" + n : n.toString();
@@ -155,6 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!response.ok) throw new Error("Network response was not ok");
         const accidents = await response.json();
 
+        lastFullAccidents = Array.isArray(accidents) ? accidents : [];
+
         const resultsSection = document.getElementById("results");
         const chartsSection = document.getElementById("charts");
         const noResultsMessage = document.getElementById("no-results-message");
@@ -175,6 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Error fetching accident data");
       }
     });
+
+  const exportBtn = document.getElementById("export-button");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      exportAccidentsToCSV(lastFullAccidents);
+    });
+  }
 
   (window as any).removeState = (stateCode: string) =>
     removeState(
