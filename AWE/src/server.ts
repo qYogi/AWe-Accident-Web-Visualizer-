@@ -6,6 +6,12 @@ import { pool } from "./db/db";
 import "dotenv/config";
 import { addAccident, deleteAccident } from "./db/adminOps";
 import { randomBytes } from "crypto";
+import {
+  parseCookies,
+  parseForm,
+  getHtmlWithPartials,
+  servePartial,
+} from "./utils/serverUtils";
 
 const PORT = process.env.PORT || 3000;
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
@@ -19,44 +25,6 @@ const ADMIN_USER = "admin";
 const ADMIN_PASS = "password123";
 const SESSIONS = new Set<string>();
 
-function parseCookies(cookieHeader?: string) {
-  const cookies: Record<string, string> = {};
-  if (!cookieHeader) return cookies;
-  for (const pair of cookieHeader.split(";")) {
-    const [key, ...v] = pair.trim().split("=");
-    cookies[key] = decodeURIComponent(v.join("="));
-  }
-  return cookies;
-}
-
-function parseForm(body: string) {
-  return Object.fromEntries(
-    body.split("&").map((kv) => {
-      const [k, v] = kv.split("=");
-      return [
-        decodeURIComponent(k.replace(/\+/g, " ")),
-        decodeURIComponent((v || "").replace(/\+/g, " ")),
-      ];
-    })
-  );
-}
-
-async function getHtmlWithPartials() {
-  let template = await readFile(TEMPLATE_PATH, "utf-8");
-  const partials = ["advanced-filter", "table", "charts"];
-  for (const name of partials) {
-    const content = await readFile(join(PARTIALS_DIR, `${name}.html`), "utf-8");
-    template = template.replace(`{{partial ${name}}}`, content);
-  }
-  return template;
-}
-
-async function servePartial(res: any, partial: string) {
-  const html = await readFile(join(PARTIALS_DIR, partial), "utf-8");
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.end(html);
-}
-
 createServer(async (req, res) => {
   try {
     const { pathname, searchParams } = new URL(
@@ -69,9 +37,9 @@ createServer(async (req, res) => {
 
     if (pathname === "/admin" && req.method === "GET") {
       if (!isLoggedIn) {
-        await servePartial(res, "admin-login.html");
+        await servePartial(res, "admin-login.html", PARTIALS_DIR);
       } else {
-        await servePartial(res, "admin-dashboard.html");
+        await servePartial(res, "admin-dashboard.html", PARTIALS_DIR);
       }
       return;
     }
@@ -211,18 +179,22 @@ createServer(async (req, res) => {
       }
 
       try {
-        let query = `SELECT id, severity, start_time, end_time, description, street, city, county, state, country, start_lat, start_lng FROM accidents WHERE start_time BETWEEN $1 AND $2`;
+        let query = `SELECT * FROM accidents WHERE start_time BETWEEN $1 AND $2`;
         const values = [startDate, endDate];
         let paramIndex = 3;
 
         if (states.length > 0) {
-          const statePlaceholders = states.map(() => `$${paramIndex++}`).join(',');
+          const statePlaceholders = states
+            .map(() => `$${paramIndex++}`)
+            .join(",");
           query += ` AND state IN (${statePlaceholders})`;
           values.push(...states);
         }
 
         if (cities.length > 0) {
-          const cityPlaceholders = cities.map(() => `$${paramIndex++}`).join(',');
+          const cityPlaceholders = cities
+            .map(() => `$${paramIndex++}`)
+            .join(",");
           query += ` AND city IN (${cityPlaceholders})`;
           values.push(...cities);
         }
@@ -235,17 +207,19 @@ createServer(async (req, res) => {
         query += ` ORDER BY start_time DESC`;
 
         const result = await pool.query(query, values);
-        
+
         if (cities.length > 0) {
           const foundCities = new Set(result.rows.map((row: any) => row.city));
-          const missingCities = cities.filter(city => !foundCities.has(city));
-          
+          const missingCities = cities.filter((city) => !foundCities.has(city));
+
           if (missingCities.length > 0 && result.rows.length === 0) {
             res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(JSON.stringify({
-              error: `The city selected doesn't exist in the state selected.`,
-              missingCities: missingCities
-            }));
+            res.end(
+              JSON.stringify({
+                error: `The city selected doesn't exist in the state selected.`,
+                missingCities: missingCities,
+              })
+            );
             return;
           }
         }
@@ -261,7 +235,7 @@ createServer(async (req, res) => {
     }
 
     if (pathname === "/" || pathname === "/index.template.html") {
-      const html = await getHtmlWithPartials();
+      const html = await getHtmlWithPartials(TEMPLATE_PATH, PARTIALS_DIR);
       res.writeHead(200, { "Content-Type": "text/html" });
       res.end(html);
       return;

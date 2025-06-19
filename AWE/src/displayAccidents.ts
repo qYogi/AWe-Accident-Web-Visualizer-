@@ -2,8 +2,10 @@ import type { Accident } from "./types/types.js";
 import { setAccidents } from "./map.js";
 import updateCharts from "./charts.js";
 
-export function displayAccidents(accidents: Accident[] | { error: string; missingCities?: string[] }) {
-  if (typeof accidents === 'object' && 'error' in accidents) {
+export function displayAccidents(
+  accidents: Accident[] | { error: string; missingCities?: string[] }
+) {
+  if (typeof accidents === "object" && "error" in accidents) {
     const tableHead = document.querySelector("#accidents-table-head");
     const tableBody = document.querySelector("#accidents-table tbody");
     if (!tableHead || !tableBody) return;
@@ -14,7 +16,8 @@ export function displayAccidents(accidents: Accident[] | { error: string; missin
     const errorRow = document.createElement("tr");
     const errorCell = document.createElement("td");
     errorCell.colSpan = 10;
-    errorCell.style.cssText = "text-align: center; color: #e15759; font-weight: bold; padding: 2rem;";
+    errorCell.style.cssText =
+      "text-align: center; color: #e15759; font-weight: bold; padding: 2rem;";
     errorCell.textContent = accidents.error;
     errorRow.appendChild(errorCell);
     tableBody.appendChild(errorRow);
