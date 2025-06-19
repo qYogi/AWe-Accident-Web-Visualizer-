@@ -2,6 +2,8 @@ import { initMap } from "./map.js";
 import { displayAccidents } from "./displayAccidents.js";
 import { selectedStates, selectedCities, addCity, removeCity, handleStateChange, removeState, } from "./filters.js";
 import { updateSelectedStatesDisplay, updateSelectedCitiesDisplay, } from "./uiHelpers.js";
+import { exportAccidentsToCSV } from "./exportTable.js";
+let lastFullAccidents = [];
 function pad(n) {
     return n < 10 ? "0" + n : n.toString();
 }
@@ -100,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!response.ok)
                 throw new Error("Network response was not ok");
             const accidents = await response.json();
+            lastFullAccidents = Array.isArray(accidents) ? accidents : [];
             const resultsSection = document.getElementById("results");
             const chartsSection = document.getElementById("charts");
             const noResultsMessage = document.getElementById("no-results-message");
@@ -127,6 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Error fetching accident data");
         }
     });
+    const exportBtn = document.getElementById("export-button");
+    if (exportBtn) {
+        exportBtn.addEventListener("click", () => {
+            exportAccidentsToCSV(lastFullAccidents);
+        });
+    }
     window.removeState = (stateCode) => removeState(stateCode, updateSelectedStatesDisplay, updateSelectedCitiesDisplay);
     window.removeCity = (cityName) => removeCity(cityName, updateSelectedCitiesDisplay);
 });
