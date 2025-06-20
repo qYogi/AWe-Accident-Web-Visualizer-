@@ -40,7 +40,7 @@ jobs:
         working-directory: ./AWE
 
       - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v4.3.6
+        uses: akhileshns/heroku-deploy@v4.3.8
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "acc-web-vis-56233468509d"
