@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "build:client": "tsc",
-    "dev": "tsc && tsx watch src/server.ts"
+    "dev": "tsc && tsx watch src/server.ts",
+    "start": "node public/js/server.js"
   },
   "keywords": [],
   "author": "",
