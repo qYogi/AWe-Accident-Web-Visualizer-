@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Compute bundle version
+      - name: Compute Bundle Version
         id: compute-version
         run: |
           VERSION=$(date +"%d-%b-%Y")-$(git rev-parse --short=6 HEAD)
