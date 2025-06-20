@@ -18,6 +18,19 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Compute bundle version
+        id: compute-version
+        run: |
+          VERSION=$(date +"%d-%b-%Y")-$(git rev-parse --short=6 HEAD)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Front-end bundle version: $VERSION" >> $GITHUB_STEP_SUMMARY
+
+      - name: Inject version meta tag into index.template.html
+        run: |
+          VERSION=${{ steps.compute-version.outputs.VERSION }}
+          sed -i 's|</head>|<meta name="bundle-version" content="'$VERSION'"></head>|' templates/index.template.html
+        working-directory: ./AWE
+
       - name: Install dependencies
         run: npm ci
         working-directory: ./AWE
@@ -30,6 +43,6 @@ jobs:
         uses: akhileshns/heroku-deploy@v4.3.6
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "acc-web-vis-56233468509d" # your Heroku app name
+          heroku_app_name: "acc-web-vis-56233468509d"
           heroku_email: "bogdanviziru18@gmail.com"
           appdir: "AWE"
