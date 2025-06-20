@@ -1,13 +1,13 @@
 import { createServer } from "http";
 import { readFile } from "fs/promises";
-import { extname, join, resolve } from "path";
-import { fileURLToPath } from "url";
+import { extname, join } from "path";
 import { parseCookies, getHtmlWithPartials } from "./utils/serverUtils.js";
 import { handleApiRoutes } from "./routes/apiRoutes.js";
 import { handleAdminRoutes } from "./routes/adminRoutes.js";
 const PORT = process.env.PORT || 3000;
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
-const ROOT = resolve(__dirname, "..");
+// const __dirname = fileURLToPath(new URL(".", import.meta.url));
+// const ROOT = resolve(__dirname, "..");
+const ROOT = process.cwd();
 const PARTIALS_DIR = join(ROOT, "partials");
 const TEMPLATE_PATH = join(ROOT, "templates/index.template.html");
 const STATIC_DIR = join(ROOT, "public");
