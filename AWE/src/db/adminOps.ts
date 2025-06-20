@@ -1,4 +1,4 @@
-import { pool } from "./db";
+import { pool } from "./db.js";
 import { Accident } from "./typed";
 
 export async function addAccident(accident: Accident) {
