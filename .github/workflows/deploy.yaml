@@ -49,10 +49,9 @@ jobs:
           heroku_app_name: "acc-web-vis-56233468509d"
           heroku_email: "bogdanviziru18@gmail.com"
           appdir: "AWE"
-          usedocker: false
-          env: |
-            DB_HOST=${{ secrets.DB_HOST }}
-            DB_USER=${{ secrets.DB_USER }}
-            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            DB_NAME=${{ secrets.DB_NAME }}
-            DB_PORT=${{ secrets.DB_PORT }}
+        env:
+          HD_DB_HOST: ${{ secrets.DB_HOST }}
+          HD_DB_USER: ${{ secrets.DB_USER }}
+          HD_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          HD_DB_NAME: ${{ secrets.DB_NAME }}
+          HD_DB_PORT: ${{ secrets.DB_PORT }}
