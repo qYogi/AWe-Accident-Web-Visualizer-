@@ -138,7 +138,9 @@ async function fetchAndDisplayAccidents(page) {
     }
 }
 document.addEventListener("DOMContentLoaded", () => {
-    initMap("map");
+    setTimeout(() => {
+        initMap("map");
+    }, 50);
     populateDateTimeDropdowns();
     const stateSelect = document.getElementById("state");
     stateSelect.addEventListener("change", () => handleStateChange(updateSelectedStatesDisplay, updateSelectedCitiesDisplay));

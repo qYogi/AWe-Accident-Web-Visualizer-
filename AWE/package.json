@@ -4,10 +4,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run build:minify",
     "build:client": "tsc",
+    "build:minify": "esbuild public/js/main.js public/js/charts.js public/js/displayAccidents.js public/js/filters.js public/js/map.js public/js/uiHelpers.js public/js/exportTable.js --bundle --minify --outdir=public/js --allow-overwrite",
     "dev": "tsc && tsx watch src/server.ts",
-    "start": "node public/js/server.js"
+    "start": "npm run build && node public/js/server.js"
   },
   "keywords": [],
   "author": "",
