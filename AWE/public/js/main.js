@@ -167,15 +167,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementById("date-form")
         ?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const searchButton = document.getElementById('search-button');
-        const headerContent = document.getElementById('header-content');
-        const loadingAnimation = document.getElementById('loading-animation');
+        const searchButton = document.getElementById("search-button");
+        const headerContent = document.getElementById("header-content");
+        const loadingAnimation = document.getElementById("loading-animation");
         if (searchButton.disabled) {
             return;
         }
         searchButton.disabled = true;
-        headerContent?.classList.add('hidden');
-        loadingAnimation?.classList.remove('hidden');
+        headerContent?.classList.add("hidden");
+        loadingAnimation?.classList.remove("hidden");
         try {
             await fetchAndDisplayAccidents(1);
         }
@@ -185,8 +185,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         finally {
             searchButton.disabled = false;
-            headerContent?.classList.remove('hidden');
-            loadingAnimation?.classList.add('hidden');
+            headerContent?.classList.remove("hidden");
+            loadingAnimation?.classList.add("hidden");
         }
     });
     const exportBtn = document.getElementById("export-button");

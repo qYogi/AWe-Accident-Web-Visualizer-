@@ -1,40 +1,57 @@
 <div id="search-criteria">
   <form id="date-form">
-      <div id="date-fields" style="display: flex; flex-direction: column; gap: 1rem;">
-      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+    <div
+      id="date-fields"
+      style="display: flex; flex-direction: column; gap: 1rem"
+    >
+      <div style="display: flex; flex-direction: column; gap: 0.5rem">
         <label>Start Date:</label>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <div style="display: flex; gap: 0.5rem; align-items: center">
           <select id="start_day" required></select>
           <select id="start_month" required></select>
           <select id="start_year" required></select>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center; margin-left: 1rem;">
+        <div
+          style="
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: 1rem;
+          "
+        >
           <span>Hour:</span>
           <select id="start_hour" required></select>
           <span>:</span>
           <select id="start_minute" required></select>
         </div>
       </div>
-      
-      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+
+      <div style="display: flex; flex-direction: column; gap: 0.5rem">
         <label>End Date:</label>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <div style="display: flex; gap: 0.5rem; align-items: center">
           <select id="end_day" required></select>
           <select id="end_month" required></select>
           <select id="end_year" required></select>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center; margin-left: 1rem;">
+        <div
+          style="
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: 1rem;
+          "
+        >
           <span>Hour:</span>
           <select id="end_hour" required></select>
           <span>:</span>
           <select id="end_minute" required></select>
         </div>
       </div>
-      
+
       <input type="hidden" id="start_date" name="start_date" required />
       <input type="hidden" id="end_date" name="end_date" required />
     </div>
-    
+
     <div id="dropdown">
       <label for="state">State:</label>
       <select id="state" name="state">
@@ -90,27 +107,49 @@
         <option value="WI">Wisconsin</option>
         <option value="WY">Wyoming</option>
       </select>
-      
-      <div id="selected-states" style="margin-top: 0.5rem; display: none;">
+
+      <div id="selected-states" style="margin-top: 0.5rem; display: none">
         <label>Selected States:</label>
-        <div id="states-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem;"></div>
+        <div
+          id="states-list"
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+          "
+        ></div>
       </div>
-      
-      <div id="city-input-section" style="margin-top: 0.5rem; display: none;">
+
+      <div id="city-input-section" style="margin-top: 0.5rem; display: none">
         <label for="city-input">City:</label>
-        <input type="text" id="city-input" placeholder="Type city name and press Enter" style="width: 100%; padding: 0.5rem; margin-top: 0.25rem;" />
-        <div id="selected-cities" style="margin-top: 0.5rem;">
+        <input
+          type="text"
+          id="city-input"
+          placeholder="Type city name & press Enter"
+        />
+        <div id="selected-cities" style="margin-top: 0.5rem">
           <label>Selected Cities:</label>
-          <div id="cities-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem;"></div>
+          <div
+            id="cities-list"
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 0.5rem;
+              margin-top: 0.25rem;
+            "
+          ></div>
         </div>
       </div>
     </div>
-    
+
     <div class="slidecontainer">
-      <label for="severity">Severity: <span id="severity-value">All</span></label>
+      <label for="severity"
+        >Severity: <span id="severity-value">All</span></label
+      >
       <input type="range" min="0" max="4" value="0" id="severity" />
     </div>
-    
+
     <button type="submit" id="search-button">Caută accidente</button>
   </form>
 </div>
