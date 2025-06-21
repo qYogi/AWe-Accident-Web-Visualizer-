@@ -17,9 +17,10 @@ function updateCharts(accidents: Accident[]) {
     if (sev >= 1 && sev <= 4) severityCounts[sev - 1]++;
   });
   if (!severityChart) {
-    severityChart = new (window as any).Chart(
-      document.getElementById("severityChart"),
-      {
+    const severityCanvas = document.getElementById("severityChart") as HTMLCanvasElement;
+    if (severityCanvas) {
+      severityCanvas.id = "severityChart";
+      severityChart = new (window as any).Chart(severityCanvas, {
         type: "bar",
         data: {
           labels: ["1", "2", "3", "4"],
@@ -31,9 +32,33 @@ function updateCharts(accidents: Accident[]) {
             },
           ],
         },
-        options: { responsive: true, plugins: { legend: { display: false } } },
-      }
-    );
+        options: { 
+          responsive: true, 
+          plugins: { 
+            legend: { display: false },
+            title: {
+              display: true,
+              text: 'Accident Severity Distribution'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Number of Accidents'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Severity Level'
+              }
+            }
+          }
+        },
+      });
+    }
   } else {
     severityChart.data.datasets[0].data = severityCounts;
     severityChart.update();
@@ -47,9 +72,10 @@ function updateCharts(accidents: Accident[]) {
   const trendLabels = Object.keys(dateMap).sort();
   const trendData = trendLabels.map((l) => dateMap[l]);
   if (!trendChart) {
-    trendChart = new (window as any).Chart(
-      document.getElementById("trendChart"),
-      {
+    const trendCanvas = document.getElementById("trendChart") as HTMLCanvasElement;
+    if (trendCanvas) {
+      trendCanvas.id = "trendChart";
+      trendChart = new (window as any).Chart(trendCanvas, {
         type: "line",
         data: {
           labels: trendLabels,
@@ -63,9 +89,33 @@ function updateCharts(accidents: Accident[]) {
             },
           ],
         },
-        options: { responsive: true, plugins: { legend: { display: false } } },
-      }
-    );
+        options: { 
+          responsive: true, 
+          plugins: { 
+            legend: { display: false },
+            title: {
+              display: true,
+              text: 'Accident Trends Over Time'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Number of Accidents'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Date'
+              }
+            }
+          }
+        },
+      });
+    }
   } else {
     trendChart.data.labels = trendLabels;
     trendChart.data.datasets[0].data = trendData;
@@ -78,9 +128,10 @@ function updateCharts(accidents: Accident[]) {
     hourCounts[hour]++;
   });
   if (!hourChart) {
-    hourChart = new (window as any).Chart(
-      document.getElementById("hourChart"),
-      {
+    const hourCanvas = document.getElementById("hourChart") as HTMLCanvasElement;
+    if (hourCanvas) {
+      hourCanvas.id = "hourChart";
+      hourChart = new (window as any).Chart(hourCanvas, {
         type: "bar",
         data: {
           labels: Array.from({ length: 24 }, (_, i) => i + ":00"),
@@ -92,9 +143,33 @@ function updateCharts(accidents: Accident[]) {
             },
           ],
         },
-        options: { responsive: true, plugins: { legend: { display: false } } },
-      }
-    );
+        options: { 
+          responsive: true, 
+          plugins: { 
+            legend: { display: false },
+            title: {
+              display: true,
+              text: 'Accidents by Hour of Day'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Number of Accidents'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Hour of Day'
+              }
+            }
+          }
+        },
+      });
+    }
   } else {
     hourChart.data.datasets[0].data = hourCounts;
     hourChart.update();

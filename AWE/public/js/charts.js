@@ -9,20 +9,48 @@ function updateCharts(accidents) {
             severityCounts[sev - 1]++;
     });
     if (!severityChart) {
-        severityChart = new window.Chart(document.getElementById("severityChart"), {
-            type: "bar",
-            data: {
-                labels: ["1", "2", "3", "4"],
-                datasets: [
-                    {
-                        label: "Number of Accidents",
-                        data: severityCounts,
-                        backgroundColor: ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2"],
+        const severityCanvas = document.getElementById("severityChart");
+        if (severityCanvas) {
+            severityCanvas.id = "severityChart";
+            severityChart = new window.Chart(severityCanvas, {
+                type: "bar",
+                data: {
+                    labels: ["1", "2", "3", "4"],
+                    datasets: [
+                        {
+                            label: "Number of Accidents",
+                            data: severityCounts,
+                            backgroundColor: ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2"],
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Accident Severity Distribution'
+                        }
                     },
-                ],
-            },
-            options: { responsive: true, plugins: { legend: { display: false } } },
-        });
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Accidents'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Severity Level'
+                            }
+                        }
+                    }
+                },
+            });
+        }
     }
     else {
         severityChart.data.datasets[0].data = severityCounts;
@@ -36,22 +64,50 @@ function updateCharts(accidents) {
     const trendLabels = Object.keys(dateMap).sort();
     const trendData = trendLabels.map((l) => dateMap[l]);
     if (!trendChart) {
-        trendChart = new window.Chart(document.getElementById("trendChart"), {
-            type: "line",
-            data: {
-                labels: trendLabels,
-                datasets: [
-                    {
-                        label: "Accidents",
-                        data: trendData,
-                        borderColor: "#4e79a7",
-                        backgroundColor: "rgba(78,121,167,0.1)",
-                        tension: 0.2,
+        const trendCanvas = document.getElementById("trendChart");
+        if (trendCanvas) {
+            trendCanvas.id = "trendChart";
+            trendChart = new window.Chart(trendCanvas, {
+                type: "line",
+                data: {
+                    labels: trendLabels,
+                    datasets: [
+                        {
+                            label: "Accidents",
+                            data: trendData,
+                            borderColor: "#4e79a7",
+                            backgroundColor: "rgba(78,121,167,0.1)",
+                            tension: 0.2,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Accident Trends Over Time'
+                        }
                     },
-                ],
-            },
-            options: { responsive: true, plugins: { legend: { display: false } } },
-        });
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Accidents'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                },
+            });
+        }
     }
     else {
         trendChart.data.labels = trendLabels;
@@ -64,20 +120,48 @@ function updateCharts(accidents) {
         hourCounts[hour]++;
     });
     if (!hourChart) {
-        hourChart = new window.Chart(document.getElementById("hourChart"), {
-            type: "bar",
-            data: {
-                labels: Array.from({ length: 24 }, (_, i) => i + ":00"),
-                datasets: [
-                    {
-                        label: "Accidents",
-                        data: hourCounts,
-                        backgroundColor: "#4e79a7",
+        const hourCanvas = document.getElementById("hourChart");
+        if (hourCanvas) {
+            hourCanvas.id = "hourChart";
+            hourChart = new window.Chart(hourCanvas, {
+                type: "bar",
+                data: {
+                    labels: Array.from({ length: 24 }, (_, i) => i + ":00"),
+                    datasets: [
+                        {
+                            label: "Accidents",
+                            data: hourCounts,
+                            backgroundColor: "#4e79a7",
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Accidents by Hour of Day'
+                        }
                     },
-                ],
-            },
-            options: { responsive: true, plugins: { legend: { display: false } } },
-        });
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Accidents'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Hour of Day'
+                            }
+                        }
+                    }
+                },
+            });
+        }
     }
     else {
         hourChart.data.datasets[0].data = hourCounts;

@@ -170,3 +170,44 @@ button:hover {
   gap: 1rem;
   margin: 0rem 1rem;
 }
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: 20px !important;
+}
+
+.sortable-header:hover {
+  background-color: #e8e8e8 !important;
+}
+
+.sort-asc::after {
+  content: "↑";
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+  color: #666;
+}
+
+.sort-desc::after {
+  content: "↓";
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+  color: #666;
+}
+
+.sort-neutral::after {
+  content: "↕";
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8em;
+  color: #666;
+}

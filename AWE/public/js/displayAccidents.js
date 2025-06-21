@@ -1,5 +1,6 @@
 import { setAccidents } from "./map.js";
 import updateCharts from "./charts.js";
+import { tableSorter } from "./tableSorting.js";
 export function displayAccidents(accidents) {
     if (typeof accidents === "object" && "error" in accidents) {
         const tableHead = document.querySelector("#accidents-table-head");
@@ -51,6 +52,8 @@ export function displayAccidents(accidents) {
         headerRow.appendChild(th);
     });
     tableHead.appendChild(headerRow);
+    tableSorter.setData(accidents);
+    tableSorter.createSortableHeaders();
     accidents.forEach((accident) => {
         const row = document.createElement("tr");
         columns.forEach((column) => {
