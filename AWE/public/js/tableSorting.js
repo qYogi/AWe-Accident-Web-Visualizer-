@@ -11,7 +11,6 @@ export class TableSorter {
         const tableHead = document.querySelector('#accidents-table-head');
         if (!tableHead)
             return;
-        // Add click listeners to sortable headers
         tableHead.addEventListener('click', (e) => {
             const target = e.target;
             if (target.tagName === 'TH' && target.classList.contains('sortable-header')) {
@@ -25,7 +24,6 @@ export class TableSorter {
     handleSort(column) {
         if (!this.originalData.length)
             return;
-        // Determine next sort state
         let newState;
         if (!this.currentSort || this.currentSort.column !== column) {
             newState = 'asc';
@@ -42,11 +40,8 @@ export class TableSorter {
                     newState = 'asc';
             }
         }
-        // Update sort configuration
         this.currentSort = newState === 'neutral' ? null : { column, state: newState };
-        // Update visual indicators
         this.updateSortIndicators(column, newState);
-        // Sort and display data
         const sortedData = this.sortData(this.originalData, column, newState);
         this.displaySortedData(sortedData);
     }
@@ -57,19 +52,15 @@ export class TableSorter {
         const sorted = [...data].sort((a, b) => {
             let aVal = a[column];
             let bVal = b[column];
-            // Handle different data types
             if (column === 'severity') {
-                // Numeric sorting for severity
                 aVal = parseFloat(aVal) || 0;
                 bVal = parseFloat(bVal) || 0;
             }
             else if (column === 'start_time' || column === 'end_time') {
-                // Date sorting
                 aVal = new Date(aVal).getTime();
                 bVal = new Date(bVal).getTime();
             }
             else {
-                // String sorting for street, city, state
                 aVal = (aVal || '').toString().toLowerCase();
                 bVal = (bVal || '').toString().toLowerCase();
             }
@@ -86,9 +77,7 @@ export class TableSorter {
         headers.forEach(header => {
             const headerElement = header;
             const headerColumn = headerElement.getAttribute('data-column');
-            // Remove all sort classes
             headerElement.classList.remove('sort-asc', 'sort-desc', 'sort-neutral');
-            // Add appropriate class
             if (headerColumn === column) {
                 headerElement.classList.add(`sort-${state}`);
             }
@@ -129,7 +118,6 @@ export class TableSorter {
             tableBody.appendChild(row);
         });
     }
-    // Public method to create sortable headers (excluding ID column)
     createSortableHeaders() {
         const tableHead = document.querySelector('#accidents-table-head');
         if (!tableHead)
@@ -145,12 +133,10 @@ export class TableSorter {
             }
         });
     }
-    // Reset sorting
     resetSorting() {
         this.currentSort = null;
         this.updateSortIndicators('', 'neutral');
         this.displaySortedData(this.originalData);
     }
 }
-// Export singleton instance
 export const tableSorter = new TableSorter();

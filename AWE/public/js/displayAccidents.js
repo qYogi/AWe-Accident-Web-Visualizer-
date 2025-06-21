@@ -52,10 +52,8 @@ export function displayAccidents(accidents) {
         headerRow.appendChild(th);
     });
     tableHead.appendChild(headerRow);
-    // Set data for sorting and create sortable headers (excluding ID column)
     tableSorter.setData(accidents);
     tableSorter.createSortableHeaders();
-    // Display initial data
     accidents.forEach((accident) => {
         const row = document.createElement("tr");
         columns.forEach((column) => {
