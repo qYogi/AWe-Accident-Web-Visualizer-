@@ -607,3 +607,20 @@ button[type="submit"]:hover {
     gap: 0.5rem !important;
   }
 }
+
+.parahraph-header {
+  color: #504b38;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.report-link {
+  color: #504b38;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+#loading-animation {
+  position: absolute;
+  top: 50%;
+}

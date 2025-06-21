@@ -23,6 +23,18 @@ createServer(async (req, res) => {
             await handleAdminRoutes(req, res, pathname, cookies, searchParams);
             return;
         }
+        if (pathname.startsWith("/docs/")) {
+            const docsPath = join(ROOT, pathname);
+            try {
+                const content = await readFile(docsPath);
+                res.writeHead(200, { "Content-Type": "text/html" });
+                res.end(content);
+                return;
+            }
+            catch {
+                // Fall through to 404
+            }
+        }
         if (pathname === "/" || pathname === "/index.template.html") {
             const html = await getHtmlWithPartials(TEMPLATE_PATH, PARTIALS_DIR);
             res.writeHead(200, { "Content-Type": "text/html" });

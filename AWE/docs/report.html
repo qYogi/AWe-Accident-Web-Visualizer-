@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      Requirements Specification for the Web-based Accident Data Visualization
+      Tool
+    </title>
+    <meta name="author" content="Viziru Bogdan" />
+    <meta name="author" content="Brezuleanu Denis" />
+    <meta name="date" content="2025-06-22" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <style>
+      body {
+        overflow: auto;
+      }
+      .report-content {
+        background: #f8f3d9;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px 0 rgba(129, 154, 145, 0.1),
+          0 1.5px 4px 0 rgba(80, 75, 56, 0.08);
+        padding: 2.5rem;
+        border: 1.5px solid #ebe5c2;
+        margin: 2rem;
+      }
+      .report-content h1,
+      .report-content h2 {
+        text-align: left;
+      }
+      .report-content p,
+      .report-content ul {
+        text-align: left;
+        color: #333;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 2rem;
+        background-color: #a7c1a8;
+        color: #333;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background-color 0.2s;
+      }
+
+      .back-link:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <main class="right-panel" style="grid-column: span 2">
+        <div class="report-content">
+          <a href="/" class="back-link">Back to Home</a>
+          <article>
+            <h1>AWE Project Report: Accident Data Visualization Tool</h1>
+
+            <section id="introduction">
+              <h2>1. Introduction</h2>
+              <p>
+                This report provides a detailed overview of the AWE (Accident
+                Web Visualizer) project. The application is a web-based tool
+                designed for the dynamic and flexible visualization of accident
+                data from the USA.
+              </p>
+              <p>
+                The primary goal of AWE is to facilitate the exploration,
+                analysis, and export of accident data through an intuitive user
+                interface, offering multiple visualization formats and advanced
+                multi-criteria search capabilities.
+              </p>
+            </section>
+
+            <section id="system-purpose">
+              <h2>2. System Purpose and Functionality</h2>
+              <p>The AWE application allows users to:</p>
+              <ul>
+                <li>
+                  Visualize accident data from the USA for a selected time
+                  interval.
+                </li>
+                <li>
+                  Generate statistics and visualizations, including interactive
+                  maps, bar charts, and pie charts.
+                </li>
+                <li>
+                  Export data tables in CSV format and graphics in various image
+                  formats.
+                </li>
+                <li>
+                  Perform multi-criteria searches to filter incidents based on
+                  specific conditions.
+                </li>
+              </ul>
+            </section>
+
+            <section id="functional-requirements">
+              <h2>3. Implemented Features</h2>
+              <ul>
+                <li>
+                  <strong>Time Interval Selection:</strong> Users can select a
+                  specific date range to view accident data.
+                </li>
+                <li>
+                  <strong>Data Visualization:</strong> The application generates
+                  and displays statistics and visualizations in multiple
+                  formats:
+                  <ul>
+                    <li>
+                      An interactive map displaying accident locations,
+                      leveraging the Leaflet.js library.
+                    </li>
+                    <li>
+                      Bar charts and pie charts for statistical representation,
+                      built with Chart.js.
+                    </li>
+                    <li>A paginated and sortable data table.</li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Export Functionality:</strong> Users can export the
+                  filtered data table to CSV format and save generated charts as
+                  images (CSV, WebP, SVG).
+                </li>
+                <li>
+                  <strong>Multi-Criteria Search:</strong> A comprehensive search
+                  form allows filtering by:
+                  <ul>
+                    <li>State and city</li>
+                    <li>Date and time of day.</li>
+                    <li>Severity level.</li>
+                  </ul>
+                </li>
+              </ul>
+            </section>
+
+            <section id="interface-requirements">
+              <h2>4. User Interface and Interaction</h2>
+              <ul>
+                <li>
+                  The interface provides a dedicated panel for selecting search
+                  filters, including date pickers, dropdowns, and sliders.
+                </li>
+                <li>
+                  Visualizations (Table, Map, Charts) are displayed in the main
+                  content area and update dynamically based on the selected
+                  filters without requiring a page reload.
+                </li>
+                <li>
+                  Export buttons for CSV and graphics are clearly accessible
+                  within their respective sections.
+                </li>
+                <li>
+                  The application provides visual feedback during data loading
+                  and displays a message when no results are found.
+                </li>
+              </ul>
+            </section>
+
+            <section id="other-requirements">
+              <h2>5. Technical Specifications</h2>
+              <ul>
+                <li>
+                  The application uses the Leaflet.js library for rendering
+                  interactive maps.
+                </li>
+                <li>
+                  The interface is responsive, ensuring accessibility from both
+                  desktop and mobile devices.
+                </li>
+                <li>
+                  Data and graphic exports are provided in standard formats
+                  (CSV, WebP, SVG).
+                </li>
+              </ul>
+            </section>
+
+            <section id="glossary">
+              <h2>6. Glossary</h2>
+              <ul>
+                <li>
+                  <strong>Map-based visualization:</strong> Displaying accident
+                  data on an interactive map using Leaflet.js.
+                </li>
+                <li>
+                  <strong>CSV Export:</strong> Saving the current data table as
+                  a comma-separated values text file.
+                </li>
+                <li>
+                  <strong>Multi-criteria search:</strong> Advanced search using
+                  simultaneous filters for location, date, severity, and
+                  weather.
+                </li>
+              </ul>
+            </section>
+          </article>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
