@@ -12,7 +12,12 @@ import {
   updateSelectedStatesDisplay,
   updateSelectedCitiesDisplay,
 } from "./uiHelpers.js";
-import { exportAccidentsToCSV } from "./exportTable.js";
+import { 
+  exportAccidentsToCSV,
+  exportChartDataToCSV,
+  exportChartToWebP,
+  exportChartToSVG 
+} from "./exportTable.js";
 
 let lastFullAccidents: any[] = [];
 
@@ -185,6 +190,31 @@ document.addEventListener("DOMContentLoaded", () => {
   if (exportBtn) {
     exportBtn.addEventListener("click", () => {
       exportAccidentsToCSV(lastFullAccidents);
+    });
+  }
+
+  const chartsSection = document.getElementById('charts');
+  if (chartsSection) {
+    chartsSection.addEventListener('click', (e) => {
+      const target = e.target as HTMLButtonElement;
+      if (target.classList.contains('chart-export-btn')) {
+        const chartId = target.dataset.chart;
+        const format = target.dataset.format;
+
+        if (!chartId || !format) return;
+
+        switch (format) {
+          case 'csv':
+            exportChartDataToCSV(chartId);
+            break;
+          case 'webp':
+            exportChartToWebP(chartId, `${chartId}.webp`);
+            break;
+          case 'svg':
+            exportChartToSVG(chartId, `${chartId}.svg`);
+            break;
+        }
+      }
     });
   }
 

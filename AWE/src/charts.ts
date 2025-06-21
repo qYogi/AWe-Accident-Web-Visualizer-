@@ -10,12 +10,26 @@ let severityChart: any | undefined;
 let trendChart: any | undefined;
 let hourChart: any | undefined;
 
+export const chartData: { [key: string]: any[] } = {
+  severityChart: [],
+  trendChart: [],
+  hourChart: [],
+};
+
 function updateCharts(accidents: Accident[]) {
   const severityCounts = [0, 0, 0, 0];
   accidents.forEach((a) => {
     const sev = parseInt(a.severity as string);
     if (sev >= 1 && sev <= 4) severityCounts[sev - 1]++;
   });
+
+  chartData.severityChart = [
+    { severity: '1', count: severityCounts[0] },
+    { severity: '2', count: severityCounts[1] },
+    { severity: '3', count: severityCounts[2] },
+    { severity: '4', count: severityCounts[3] },
+  ];
+
   if (!severityChart) {
     const severityCanvas = document.getElementById("severityChart") as HTMLCanvasElement;
     if (severityCanvas) {
@@ -70,7 +84,9 @@ function updateCharts(accidents: Accident[]) {
     dateMap[d] = (dateMap[d] || 0) + 1;
   });
   const trendLabels = Object.keys(dateMap).sort();
-  const trendData = trendLabels.map((l) => dateMap[l]);
+  const trendDataValues = trendLabels.map((l) => dateMap[l]);
+  chartData.trendChart = trendLabels.map((label, index) => ({ date: label, count: trendDataValues[index] }));
+
   if (!trendChart) {
     const trendCanvas = document.getElementById("trendChart") as HTMLCanvasElement;
     if (trendCanvas) {
@@ -82,7 +98,7 @@ function updateCharts(accidents: Accident[]) {
           datasets: [
             {
               label: "Accidents",
-              data: trendData,
+              data: trendDataValues,
               borderColor: "#4e79a7",
               backgroundColor: "rgba(78,121,167,0.1)",
               tension: 0.2,
@@ -118,7 +134,7 @@ function updateCharts(accidents: Accident[]) {
     }
   } else {
     trendChart.data.labels = trendLabels;
-    trendChart.data.datasets[0].data = trendData;
+    trendChart.data.datasets[0].data = trendDataValues;
     trendChart.update();
   }
 
@@ -127,6 +143,8 @@ function updateCharts(accidents: Accident[]) {
     const hour = new Date(a.start_time).getHours();
     hourCounts[hour]++;
   });
+  chartData.hourChart = hourCounts.map((value, index) => ({ hour: `${index}:00`, count: value }));
+
   if (!hourChart) {
     const hourCanvas = document.getElementById("hourChart") as HTMLCanvasElement;
     if (hourCanvas) {

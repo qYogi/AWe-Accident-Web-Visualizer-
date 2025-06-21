@@ -211,3 +211,44 @@ button:hover {
   font-size: 0.8em;
   color: #666;
 }
+
+.charts-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.chart-container {
+  flex: 1 1 300px;
+  min-width: 300px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-export-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.chart-export-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 4px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.chart-export-btn:hover {
+  background-color: #e0e0e0;
+}

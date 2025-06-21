@@ -2,7 +2,7 @@ import { initMap } from "./map.js";
 import { displayAccidents } from "./displayAccidents.js";
 import { selectedStates, selectedCities, addCity, removeCity, handleStateChange, removeState, } from "./filters.js";
 import { updateSelectedStatesDisplay, updateSelectedCitiesDisplay, } from "./uiHelpers.js";
-import { exportAccidentsToCSV } from "./exportTable.js";
+import { exportAccidentsToCSV, exportChartDataToCSV, exportChartToWebP, exportChartToSVG } from "./exportTable.js";
 let lastFullAccidents = [];
 function pad(n) {
     return n < 10 ? "0" + n : n.toString();
@@ -134,6 +134,29 @@ document.addEventListener("DOMContentLoaded", () => {
     if (exportBtn) {
         exportBtn.addEventListener("click", () => {
             exportAccidentsToCSV(lastFullAccidents);
+        });
+    }
+    const chartsSection = document.getElementById('charts');
+    if (chartsSection) {
+        chartsSection.addEventListener('click', (e) => {
+            const target = e.target;
+            if (target.classList.contains('chart-export-btn')) {
+                const chartId = target.dataset.chart;
+                const format = target.dataset.format;
+                if (!chartId || !format)
+                    return;
+                switch (format) {
+                    case 'csv':
+                        exportChartDataToCSV(chartId);
+                        break;
+                    case 'webp':
+                        exportChartToWebP(chartId, `${chartId}.webp`);
+                        break;
+                    case 'svg':
+                        exportChartToSVG(chartId, `${chartId}.svg`);
+                        break;
+                }
+            }
         });
     }
     window.removeState = (stateCode) => removeState(stateCode, updateSelectedStatesDisplay, updateSelectedCitiesDisplay);
