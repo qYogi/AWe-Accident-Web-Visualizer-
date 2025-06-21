@@ -3,10 +3,20 @@ import { setAccidents } from "./map.js";
 import updateCharts from "./charts.js";
 import { tableSorter } from "./tableSorting.js";
 
-export function displayAccidents(
-  accidents: Accident[] | { error: string; missingCities?: string[] }
-) {
-  if (typeof accidents === "object" && "error" in accidents) {
+export interface AccidentsResponse {
+  accidents: Accident[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface ErrorResponse {
+  error: string;
+  missingCities?: string[];
+}
+
+export function displayAccidents(response: AccidentsResponse | ErrorResponse) {
+  if ("error" in response) {
     const tableHead = document.querySelector("#accidents-table-head");
     const tableBody = document.querySelector("#accidents-table tbody");
     if (!tableHead || !tableBody) return;
@@ -19,16 +29,19 @@ export function displayAccidents(
     errorCell.colSpan = 10;
     errorCell.style.cssText =
       "text-align: center; color: #e15759; font-weight: bold; padding: 2rem;";
-    errorCell.textContent = accidents.error;
+    errorCell.textContent = response.error;
     errorRow.appendChild(errorCell);
     tableBody.appendChild(errorRow);
+
+    const paginationContainer = document.getElementById("pagination-controls");
+    if (paginationContainer) paginationContainer.innerHTML = "";
 
     setAccidents([]);
     updateCharts([]);
     return;
   }
 
-  if (!accidents || accidents.length === 0) return;
+  const { accidents } = response;
 
   const tableHead = document.querySelector("#accidents-table-head");
   const tableBody = document.querySelector("#accidents-table tbody");
@@ -82,4 +95,37 @@ export function displayAccidents(
 
   setAccidents(accidents);
   updateCharts(accidents);
+}
+
+export function createPagination(
+  paginationContainer: HTMLElement,
+  currentPage: number,
+  totalPages: number,
+  onPageChange: (page: number) => void
+) {
+  paginationContainer.innerHTML = "";
+  if (totalPages <= 1) return;
+
+  const select = document.createElement("select");
+  select.className = "pagination-select";
+  for (let i = 1; i <= totalPages; i++) {
+    const option = document.createElement("option");
+    option.value = i.toString();
+    option.textContent = `Page ${i} of ${totalPages}`;
+    if (i === currentPage) {
+      option.selected = true;
+    }
+    select.appendChild(option);
+  }
+
+  select.addEventListener("change", (e) => {
+    const newPage = parseInt((e.target as HTMLSelectElement).value, 10);
+    onPageChange(newPage);
+  });
+
+  const label = document.createElement("label");
+  label.textContent = "Go to page: ";
+  label.appendChild(select);
+
+  paginationContainer.appendChild(label);
 }
