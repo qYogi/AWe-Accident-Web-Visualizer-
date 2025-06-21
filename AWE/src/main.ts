@@ -190,7 +190,9 @@ async function fetchAndDisplayAccidents(page: number) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initMap("map");
+  setTimeout(() => {
+    initMap("map");
+  }, 50);
   populateDateTimeDropdowns();
 
   const stateSelect = document.getElementById("state") as HTMLSelectElement;
