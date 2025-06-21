@@ -1,6 +1,7 @@
 import type { Accident } from "./types/types.js";
 import { setAccidents } from "./map.js";
 import updateCharts from "./charts.js";
+import { tableSorter } from "./tableSorting.js";
 
 export function displayAccidents(
   accidents: Accident[] | { error: string; missingCities?: string[] }
@@ -60,6 +61,9 @@ export function displayAccidents(
     headerRow.appendChild(th);
   });
   tableHead.appendChild(headerRow);
+
+  tableSorter.setData(accidents);
+  tableSorter.createSortableHeaders();
 
   accidents.forEach((accident) => {
     const row = document.createElement("tr");
