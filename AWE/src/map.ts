@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as L from "https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js";
+import * as L from "https://esm.sh/leaflet@1.9.4";
 import { Accident } from "./types/types";
 
 let map: L.Map | null = null;
