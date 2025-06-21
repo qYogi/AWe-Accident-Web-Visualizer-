@@ -228,7 +228,29 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("date-form")
     ?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      fetchAndDisplayAccidents(1);
+
+      const searchButton = document.getElementById('search-button') as HTMLButtonElement;
+      const headerContent = document.getElementById('header-content');
+      const loadingAnimation = document.getElementById('loading-animation');
+
+      if (searchButton.disabled) {
+          return; 
+      }
+      
+      searchButton.disabled = true;
+      headerContent?.classList.add('hidden');
+      loadingAnimation?.classList.remove('hidden');
+
+      try {
+        await fetchAndDisplayAccidents(1);
+      } catch(error) {
+        console.error("Failed to fetch or display accidents", error);
+        alert("An error occurred. Please try again.");
+      } finally {
+        searchButton.disabled = false;
+        headerContent?.classList.remove('hidden');
+        loadingAnimation?.classList.add('hidden');
+      }
     });
 
   const exportBtn = document.getElementById("export-button");
