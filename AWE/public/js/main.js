@@ -1,9 +1,11 @@
 import { initMap } from "./map.js";
-import { displayAccidents } from "./displayAccidents.js";
+import { displayAccidents, createPagination } from "./displayAccidents.js";
 import { selectedStates, selectedCities, addCity, removeCity, handleStateChange, removeState, } from "./filters.js";
 import { updateSelectedStatesDisplay, updateSelectedCitiesDisplay, } from "./uiHelpers.js";
 import { exportAccidentsToCSV } from "./exportTable.js";
+import updateCharts from "./charts.js";
 let lastFullAccidents = [];
+let currentPage = 1;
 function pad(n) {
     return n < 10 ? "0" + n : n.toString();
 }
@@ -47,6 +49,94 @@ function populateDateTimeDropdowns() {
     document.getElementById("end_hour").value = pad(23);
     document.getElementById("end_minute").value = pad(59);
 }
+async function fetchAndDisplayAccidents(page) {
+    currentPage = page;
+    const sd = `${document.getElementById("start_year").value}-${document.getElementById("start_month").value}-${document.getElementById("start_day").value} ${document.getElementById("start_hour").value}:${document.getElementById("start_minute").value}:00`;
+    const ed = `${document.getElementById("end_year").value}-${document.getElementById("end_month").value}-${document.getElementById("end_day").value} ${document.getElementById("end_hour").value}:${document.getElementById("end_minute").value}:59`;
+    document.getElementById("start_date").value = sd;
+    document.getElementById("end_date").value = ed;
+    const startDate = sd;
+    const endDate = ed;
+    const severity = document.getElementById("severity")
+        ?.value;
+    try {
+        const queryParams = new URLSearchParams({
+            start_date: startDate,
+            end_date: endDate,
+            page: currentPage.toString(),
+        });
+        if (selectedStates.size > 0) {
+            selectedStates.forEach((state) => queryParams.append("state", state));
+        }
+        if (selectedCities.size > 0) {
+            selectedCities.forEach((city) => queryParams.append("city", city));
+        }
+        if (severity !== "0")
+            queryParams.append("severity", severity);
+        const accidentsPromise = fetch(`/api/accidents?${queryParams.toString()}`).then((res) => {
+            if (!res.ok)
+                throw new Error("Network response was not ok");
+            return res.json();
+        });
+        const chartsPromise = fetch(`/api/accidents/for-charts?${queryParams.toString()}`).then((res) => {
+            if (!res.ok)
+                throw new Error("Chart data fetch failed");
+            return res.json();
+        });
+        const [accidentsData, chartsData] = await Promise.all([
+            accidentsPromise,
+            chartsPromise,
+        ]);
+        const data = accidentsData;
+        const fullAccidentsForCharts = chartsData;
+        const resultsSection = document.getElementById("results");
+        const chartsSection = document.getElementById("charts");
+        const noResultsMessage = document.getElementById("no-results-message");
+        if ("error" in data) {
+            displayAccidents(data);
+            if (resultsSection)
+                resultsSection.classList.remove("hidden");
+            if (noResultsMessage)
+                noResultsMessage.classList.add("hidden");
+            if (chartsSection)
+                chartsSection.classList.add("hidden");
+            updateCharts([]);
+            return;
+        }
+        lastFullAccidents = data.accidents;
+        if (data.total === 0) {
+            if (resultsSection)
+                resultsSection.classList.add("hidden");
+            if (noResultsMessage)
+                noResultsMessage.classList.remove("hidden");
+            if (chartsSection)
+                chartsSection.classList.add("hidden");
+            displayAccidents({ accidents: [], total: 0, page: 1, limit: 10 });
+            updateCharts([]);
+        }
+        else {
+            displayAccidents(data);
+            updateCharts(fullAccidentsForCharts);
+            if (resultsSection)
+                resultsSection.classList.remove("hidden");
+            if (chartsSection)
+                chartsSection.classList.remove("hidden");
+            if (noResultsMessage)
+                noResultsMessage.classList.add("hidden");
+            const paginationContainer = document.getElementById("pagination-controls");
+            if (paginationContainer) {
+                const totalPages = Math.ceil(data.total / data.limit);
+                createPagination(paginationContainer, currentPage, totalPages, (newPage) => {
+                    fetchAndDisplayAccidents(newPage);
+                });
+            }
+        }
+    }
+    catch (error) {
+        console.error("Error:", error);
+        alert("Error fetching accident data");
+    }
+}
 document.addEventListener("DOMContentLoaded", () => {
     initMap("map");
     populateDateTimeDropdowns();
@@ -77,58 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementById("date-form")
         ?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const sd = `${document.getElementById("start_year").value}-${document.getElementById("start_month").value}-${document.getElementById("start_day").value} ${document.getElementById("start_hour").value}:${document.getElementById("start_minute").value}:00`;
-        const ed = `${document.getElementById("end_year").value}-${document.getElementById("end_month").value}-${document.getElementById("end_day").value} ${document.getElementById("end_hour").value}:${document.getElementById("end_minute").value}:59`;
-        document.getElementById("start_date").value = sd;
-        document.getElementById("end_date").value = ed;
-        const startDate = sd;
-        const endDate = ed;
-        const severity = document.getElementById("severity")
-            ?.value;
-        try {
-            const queryParams = new URLSearchParams({
-                start_date: startDate,
-                end_date: endDate,
-            });
-            if (selectedStates.size > 0) {
-                selectedStates.forEach((state) => queryParams.append("state", state));
-            }
-            if (selectedCities.size > 0) {
-                selectedCities.forEach((city) => queryParams.append("city", city));
-            }
-            if (severity !== "0")
-                queryParams.append("severity", severity);
-            const response = await fetch(`/api/accidents?${queryParams.toString()}`);
-            if (!response.ok)
-                throw new Error("Network response was not ok");
-            const accidents = await response.json();
-            lastFullAccidents = Array.isArray(accidents) ? accidents : [];
-            const resultsSection = document.getElementById("results");
-            const chartsSection = document.getElementById("charts");
-            const noResultsMessage = document.getElementById("no-results-message");
-            if (accidents.length === 0) {
-                if (resultsSection)
-                    resultsSection.classList.add("hidden");
-                if (noResultsMessage)
-                    noResultsMessage.classList.remove("hidden");
-                if (chartsSection)
-                    chartsSection.classList.add("hidden");
-                displayAccidents([]);
-            }
-            else {
-                displayAccidents(accidents);
-                if (resultsSection)
-                    resultsSection.classList.remove("hidden");
-                if (chartsSection)
-                    chartsSection.classList.remove("hidden");
-                if (noResultsMessage)
-                    noResultsMessage.classList.add("hidden");
-            }
-        }
-        catch (error) {
-            console.error("Error:", error);
-            alert("Error fetching accident data");
-        }
+        fetchAndDisplayAccidents(1);
     });
     const exportBtn = document.getElementById("export-button");
     if (exportBtn) {
