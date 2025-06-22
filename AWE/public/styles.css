@@ -693,3 +693,17 @@ button[type="submit"]:hover {
   border-color: #819a91;
   color: #fff;
 }
+
+#no-results-message {
+  min-height: 3rem;
+}
+
+.parahraph-header {
+  min-height: 3.5rem;
+}
+
+#results,
+#charts,
+#no-results-message {
+  transition: min-height 0.2s, opacity 0.2s;
+}
