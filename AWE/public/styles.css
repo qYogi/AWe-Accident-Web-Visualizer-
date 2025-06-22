@@ -83,6 +83,8 @@ h1 {
 
 #results {
   min-height: 45rem;
+  display: flex;
+  flex-direction: column;
 }
 
 #map {
@@ -183,13 +185,19 @@ button:hover {
   color: #fff;
 }
 
+.table-responsive {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .table-container {
   background: #eeefe0;
   box-shadow: 0 1px 4px 0 rgba(129, 154, 145, 0.07);
   border-bottom: 1px solid #d1d8be;
   border-right: 1px solid #d1d8be;
   border-left: 1px solid #d1d8be;
-
+  flex: 1;
   overflow-x: auto;
 }
 
@@ -620,7 +628,68 @@ button[type="submit"]:hover {
   text-decoration: none;
 }
 
-#loading-animation {
-  position: absolute;
-  top: 50%;
+.charts-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.chart-card {
+  flex: 1 1 300px;
+  min-width: 300px;
+  background: #f8f3d9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px 0 rgba(129, 154, 145, 0.07);
+  border: 1px solid #d1d8be;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h3 {
+  text-align: center;
+  color: #504b38;
+  font-size: 1.15em;
+  font-weight: 600;
+}
+
+.chart-card canvas {
+  margin-bottom: 1rem;
+}
+
+.chart-export-buttons {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #ebe5c2;
+}
+
+.chart-export-buttons h3 {
+  margin: 0;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #504b38;
+  margin-right: 0.5rem;
+}
+
+.chart-export-btn {
+  background-color: #eeefe0;
+  color: #504b38;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #a7c1a8;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.chart-export-btn:hover {
+  background-color: #a7c1a8;
+  border-color: #819a91;
+  color: #fff;
 }
