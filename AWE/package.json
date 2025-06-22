@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && npm run build:client",
-    "build:client": "esbuild dist/main.js dist/charts.js dist/displayAccidents.js dist/filters.js dist/map.js dist/uiHelpers.js dist/exportTable.js --bundle --minify --format=esm --outdir=public/js --allow-overwrite",
+    "build:client": "esbuild dist/main.js dist/charts.js dist/displayAccidents.js dist/filters.js dist/map.js dist/uiHelpers.js dist/exportTable.js dist/tableSorting.js --bundle --minify --format=esm --outdir=public/js --allow-overwrite",
     "dev": "tsx watch src/server.ts",
     "start": "npm run build && node dist/server.js"
   },
