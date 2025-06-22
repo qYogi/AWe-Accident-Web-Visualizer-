@@ -11,7 +11,7 @@ export function initMap(mapId: string, options?: L.MapOptions) {
   map = L.map(mapId, options);
   map.setView([39.82, -98.58], 5);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer("https://.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
