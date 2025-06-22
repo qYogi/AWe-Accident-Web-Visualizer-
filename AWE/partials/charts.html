@@ -1,25 +1,10 @@
-<section id="charts" style="margin-bottom: 2rem">
-  <div
-    style="
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: space-between;
-    "
-  >
-    <div
-      style="
-        flex: 1 1 300px;
-        min-width: 300px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px #0001;
-        padding: 1rem;
-      "
-    >
-      <h3 style="text-align: center">Severity Distribution</h3>
+<section id="charts" class="charts-section">
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Severity Distribution</h3>
       <canvas id="severityChart"></canvas>
       <div class="chart-export-buttons">
+        <h3>Export as:</h3>
         <button
           class="chart-export-btn"
           data-chart="severityChart"
@@ -43,19 +28,12 @@
         </button>
       </div>
     </div>
-    <div
-      style="
-        flex: 1 1 300px;
-        min-width: 300px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px #0001;
-        padding: 1rem;
-      "
-    >
-      <h3 style="text-align: center">Trend Over Time</h3>
+    <div class="chart-card">
+      <h3>Trend Over Time</h3>
       <canvas id="trendChart"></canvas>
       <div class="chart-export-buttons">
+        <h3>Export as:</h3>
+
         <button
           class="chart-export-btn"
           data-chart="trendChart"
@@ -79,19 +57,12 @@
         </button>
       </div>
     </div>
-    <div
-      style="
-        flex: 1 1 300px;
-        min-width: 300px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px #0001;
-        padding: 1rem;
-      "
-    >
-      <h3 style="text-align: center">By Hour of Day</h3>
+    <div class="chart-card">
+      <h3>By Hour of Day</h3>
       <canvas id="hourChart"></canvas>
       <div class="chart-export-buttons">
+        <h3>Export as:</h3>
+
         <button
           class="chart-export-btn"
           data-chart="hourChart"
