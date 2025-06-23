@@ -700,11 +700,7 @@ button[type="submit"]:hover {
 }
 
 #no-results-message {
-  min-height: 3rem;
-}
-
-.parahraph-header {
-  min-height: 3.5rem;
+  min-height: 1rem;
 }
 
 #results,
