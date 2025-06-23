@@ -10,12 +10,27 @@ declare global {
 const charts = new Map<string, any>();
 let exportButtonsInitialized = false;
 
-function createOrUpdateChart(
+async function loadChartJS() {
+  if (!window.Chart) {
+    await new Promise<void>((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src =
+        "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js";
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error("Failed to load Chart.js"));
+      document.head.appendChild(script);
+    });
+  }
+}
+
+async function createOrUpdateChart(
   chartId: string,
   chartType: any,
   data: any,
   options: any
 ) {
+  await loadChartJS();
+
   let chart = charts.get(chartId);
   if (chart) {
     chart.data = data;
