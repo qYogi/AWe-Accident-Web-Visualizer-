@@ -150,6 +150,65 @@
       <input type="range" min="0" max="4" value="0" id="severity" />
     </div>
 
+    <div class="filter-section">
+      <label for="duration-filter">Duration:</label>
+      <select id="duration-filter" name="duration">
+        <option value="all">All Durations</option>
+        <option value="short">Short (&lt; 30 min)</option>
+        <option value="medium">Medium (30 min - 2 hours)</option>
+        <option value="long">Long (&gt; 2 hours)</option>
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <label for="distance-filter">Distance Impact:</label>
+      <select id="distance-filter" name="distance">
+        <option value="all">All Distances</option>
+        <option value="short">Short (&lt; 1 mile)</option>
+        <option value="medium">Medium (1-5 miles)</option>
+        <option value="long">Long (&gt; 5 miles)</option>
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <label for="weather-filter">Weather Conditions:</label>
+      <select id="weather-filter" name="weather">
+        <option value="all">All Weather</option>
+        <option value="clear">Clear</option>
+        <option value="rain">Rain</option>
+        <option value="snow">Snow</option>
+        <option value="fog">Fog</option>
+        <option value="cloudy">Cloudy</option>
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <label for="time-of-day-filter">Time of Day:</label>
+      <select id="time-of-day-filter" name="timeOfDay">
+        <option value="all">All Times</option>
+        <option value="morning">Morning (6 AM - 12 PM)</option>
+        <option value="afternoon">Afternoon (12 PM - 5 PM)</option>
+        <option value="evening">Evening (5 PM - 8 PM)</option>
+        <option value="night">Night (8 PM - 6 AM)</option>
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <label for="day-of-week-filter">Day of Week:</label>
+      <select id="day-of-week-filter" name="dayOfWeek">
+        <option value="all">All Days</option>
+        <option value="monday">Monday</option>
+        <option value="tuesday">Tuesday</option>
+        <option value="wednesday">Wednesday</option>
+        <option value="thursday">Thursday</option>
+        <option value="friday">Friday</option>
+        <option value="saturday">Saturday</option>
+        <option value="sunday">Sunday</option>
+        <option value="weekday">Weekdays (Mon-Fri)</option>
+        <option value="weekend">Weekends (Sat-Sun)</option>
+      </select>
+    </div>
+
     <button type="submit" id="search-button">Search accidents</button>
   </form>
 </div>

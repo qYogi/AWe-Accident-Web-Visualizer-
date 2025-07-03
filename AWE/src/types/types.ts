@@ -26,3 +26,17 @@ export type Accident = {
   turning_loop?: boolean;
   [key: string]: any;
 };
+
+export type DurationFilter = "short" | "medium" | "long" | "all";
+export type DistanceFilter = "short" | "medium" | "long" | "all";
+export type WeatherFilter = "clear" | "rain" | "snow" | "fog" | "cloudy" | "all";
+export type TimeOfDayFilter = "morning" | "afternoon" | "evening" | "night" | "all";
+export type DayOfWeekFilter = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday" | "weekday" | "weekend" | "all";
+
+export interface FilterState {
+  duration: DurationFilter;
+  distance: DistanceFilter;
+  weather: WeatherFilter;
+  timeOfDay: TimeOfDayFilter;
+  dayOfWeek: DayOfWeekFilter;
+}

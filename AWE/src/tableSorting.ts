@@ -130,7 +130,7 @@ export class TableSorter {
         if (column.includes('time') && value) {
           value = new Date(value).toLocaleString();
         }
-        td.textContent = value as string;
+        td.textContent = value as string; 
         td.setAttribute('title', value as string);
         row.appendChild(td);
       });

@@ -169,8 +169,6 @@ function updateCharts(accidents: Accident[]) {
       },
     }
   );
-
-  // Trend Chart
   const dateMap: { [key: string]: number } = {};
   accidents.forEach((a) => {
     const d = new Date(a.start_time).toLocaleDateString();

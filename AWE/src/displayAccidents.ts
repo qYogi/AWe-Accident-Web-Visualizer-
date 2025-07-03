@@ -55,6 +55,8 @@ export function displayAccidents(response: AccidentsResponse | ErrorResponse) {
     "severity",
     "start_time",
     "end_time",
+    "duration",
+    "distance_mi",
     "description",
     "street",
     "city",
@@ -85,6 +87,27 @@ export function displayAccidents(response: AccidentsResponse | ErrorResponse) {
       let value = accident[column as keyof Accident] || "";
       if (column.includes("time") && value) {
         value = new Date(value as string).toLocaleString();
+      }
+      if (column === "duration" && value) {
+        const duration = value as string;
+        if (duration.includes(":")) {
+          const parts = duration.split(":");
+          if (parts.length >= 2) {
+            const hours = parseInt(parts[0]);
+            const minutes = parseInt(parts[1]);
+            if (hours > 0) {
+              value = `${hours}h ${minutes}m`;
+            } else {
+              value = `${minutes}m`;
+            }
+          }
+        }
+      }
+      if (column === "distance_mi" && value) {
+        const distance = parseFloat(value as string);
+        if (!isNaN(distance)) {
+          value = `${distance.toFixed(2)} mi`;
+        }
       }
       td.textContent = value as string;
       td.setAttribute("title", value as string);

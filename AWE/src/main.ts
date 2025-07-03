@@ -8,6 +8,16 @@ import {
   removeCity,
   handleStateChange,
   removeState,
+  setDurationFilter,
+  setDistanceFilter,
+  setWeatherFilter,
+  setTimeOfDayFilter,
+  setDayOfWeekFilter,
+  getDurationFilter,
+  getDistanceFilter,
+  getWeatherFilter,
+  getTimeOfDayFilter,
+  getDayOfWeekFilter,
 } from "./filters.js";
 import {
   updateSelectedStatesDisplay,
@@ -118,6 +128,18 @@ async function fetchAndDisplayAccidents(page: number) {
 
     if (severity !== "0") queryParams.append("severity", severity);
 
+    const duration = getDurationFilter();
+    const distance = getDistanceFilter();
+    const weather = getWeatherFilter();
+    const timeOfDay = getTimeOfDayFilter();
+    const dayOfWeek = getDayOfWeekFilter();
+
+    if (duration !== "all") queryParams.append("duration", duration);
+    if (distance !== "all") queryParams.append("distance", distance);
+    if (weather !== "all") queryParams.append("weather", weather);
+    if (timeOfDay !== "all") queryParams.append("timeOfDay", timeOfDay);
+    if (dayOfWeek !== "all") queryParams.append("dayOfWeek", dayOfWeek);
+
     const accidentsPromise = fetch(
       `/api/accidents?${queryParams.toString()}`
     ).then((res) => {
@@ -223,6 +245,43 @@ document.addEventListener("DOMContentLoaded", () => {
     severitySlider.addEventListener("input", () => {
       severityDisplay.textContent =
         severitySlider.value === "0" ? "All" : severitySlider.value;
+    });
+  }
+
+
+  const durationFilter = document.getElementById("duration-filter") as HTMLSelectElement;
+  const distanceFilter = document.getElementById("distance-filter") as HTMLSelectElement;
+  const weatherFilter = document.getElementById("weather-filter") as HTMLSelectElement;
+  const timeOfDayFilter = document.getElementById("time-of-day-filter") as HTMLSelectElement;
+  const dayOfWeekFilter = document.getElementById("day-of-week-filter") as HTMLSelectElement;
+
+  if (durationFilter) {
+    durationFilter.addEventListener("change", () => {
+      setDurationFilter(durationFilter.value as any);
+    });
+  }
+
+  if (distanceFilter) {
+    distanceFilter.addEventListener("change", () => {
+      setDistanceFilter(distanceFilter.value as any);
+    });
+  }
+
+  if (weatherFilter) {
+    weatherFilter.addEventListener("change", () => {
+      setWeatherFilter(weatherFilter.value as any);
+    });
+  }
+
+  if (timeOfDayFilter) {
+    timeOfDayFilter.addEventListener("change", () => {
+      setTimeOfDayFilter(timeOfDayFilter.value as any);
+    });
+  }
+
+  if (dayOfWeekFilter) {
+    dayOfWeekFilter.addEventListener("change", () => {
+      setDayOfWeekFilter(dayOfWeekFilter.value as any);
     });
   }
 

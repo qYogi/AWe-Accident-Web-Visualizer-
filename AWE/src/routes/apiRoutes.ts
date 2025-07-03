@@ -12,6 +12,11 @@ export async function handleApiRoutes(
     const states = searchParams.getAll("state");
     const cities = searchParams.getAll("city");
     const severity = searchParams.get("severity");
+    const duration = searchParams.get("duration");
+    const distance = searchParams.get("distance");
+    const weather = searchParams.get("weather");
+    const timeOfDay = searchParams.get("timeOfDay");
+    const dayOfWeek = searchParams.get("dayOfWeek");
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = 10;
     const offset = (page - 1) * limit;
@@ -44,6 +49,114 @@ export async function handleApiRoutes(
       if (severity && severity !== "0") {
         whereClause += ` AND severity = $${paramIndex++}`;
         values.push(severity);
+      }
+
+      if (duration && duration !== "all") {
+        switch (duration) {
+          case "short":
+            whereClause += ` AND (end_time - start_time) < interval '30 minutes'`;
+            break;
+          case "medium":
+            whereClause += ` AND (end_time - start_time) >= interval '30 minutes' AND (end_time - start_time) <= interval '2 hours'`;
+            break;
+          case "long":
+            whereClause += ` AND (end_time - start_time) > interval '2 hours'`;
+            break;
+        }
+      }
+
+      if (distance && distance !== "all") {
+        switch (distance) {
+          case "short":
+            whereClause += ` AND distance_mi < 1`;
+            break;
+          case "medium":
+            whereClause += ` AND distance_mi >= 1 AND distance_mi <= 5`;
+            break;
+          case "long":
+            whereClause += ` AND distance_mi > 5`;
+            break;
+        }
+      }
+
+      if (weather && weather !== "all") {
+        let weatherConditions: string[] = [];
+        switch (weather) {
+          case "clear":
+            weatherConditions = ["%Clear%"];
+            break;
+          case "rain":
+            weatherConditions = ["%Rain%", "%Drizzle%", "%Showers%"];
+            break;
+          case "snow":
+            weatherConditions = ["%Snow%", "%Sleet%", "%Blizzard%"];
+            break;
+          case "fog":
+            weatherConditions = ["%Fog%", "%Mist%", "%Haze%"];
+            break;
+          case "cloudy":
+            weatherConditions = ["%Cloud%", "%Overcast%", "%Partly Cloudy%"];
+            break;
+        }
+        if (weatherConditions.length > 0) {
+          whereClause +=
+            " AND (" +
+            weatherConditions
+              .map((_, i) => `weather_condition ILIKE $${paramIndex + i}`)
+              .join(" OR ") +
+            ")";
+          values.push(...weatherConditions);
+          paramIndex += weatherConditions.length;
+        }
+      }
+
+      if (timeOfDay && timeOfDay !== "all") {
+        switch (timeOfDay) {
+          case "morning":
+            whereClause += ` AND EXTRACT(HOUR FROM start_time) >= 6 AND EXTRACT(HOUR FROM start_time) < 12`;
+            break;
+          case "afternoon":
+            whereClause += ` AND EXTRACT(HOUR FROM start_time) >= 12 AND EXTRACT(HOUR FROM start_time) < 17`;
+            break;
+          case "evening":
+            whereClause += ` AND EXTRACT(HOUR FROM start_time) >= 17 AND EXTRACT(HOUR FROM start_time) < 20`;
+            break;
+          case "night":
+            whereClause += ` AND (EXTRACT(HOUR FROM start_time) >= 20 OR EXTRACT(HOUR FROM start_time) < 6)`;
+            break;
+        }
+      }
+
+      if (dayOfWeek && dayOfWeek !== "all") {
+        switch (dayOfWeek) {
+          case "monday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 1`;
+            break;
+          case "tuesday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 2`;
+            break;
+          case "wednesday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 3`;
+            break;
+          case "thursday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 4`;
+            break;
+          case "friday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 5`;
+            break;
+          case "saturday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 6`;
+            break;
+          case "sunday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 0`;
+            break;
+          case "weekday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) BETWEEN 1 AND 5`;
+            break;
+          case "weekend":
+            whereClause += ` AND (EXTRACT(DOW FROM start_time) = 0 OR EXTRACT(DOW FROM start_time) = 6)`;
+            break;
+        }
       }
 
       const countQuery = `SELECT COUNT(*) FROM accidents ${whereClause}`;
@@ -90,6 +203,11 @@ export async function handleApiRoutes(
     const states = searchParams.getAll("state");
     const cities = searchParams.getAll("city");
     const severity = searchParams.get("severity");
+    const duration = searchParams.get("duration");
+    const distance = searchParams.get("distance");
+    const weather = searchParams.get("weather");
+    const timeOfDay = searchParams.get("timeOfDay");
+    const dayOfWeek = searchParams.get("dayOfWeek");
 
     if (!startDate || !endDate) {
       res.writeHead(400);
@@ -119,6 +237,115 @@ export async function handleApiRoutes(
       if (severity && severity !== "0") {
         whereClause += ` AND severity = $${paramIndex++}`;
         values.push(severity);
+      }
+
+      if (duration && duration !== "all") {
+        switch (duration) {
+          case "short":
+            whereClause += ` AND (end_time - start_time) < interval '30 minutes'`;
+            break;
+          case "medium":
+            whereClause += ` AND (end_time - start_time) >= interval '30 minutes' AND (end_time - start_time) <= interval '2 hours'`;
+            break;
+          case "long":
+            whereClause += ` AND (end_time - start_time) > interval '2 hours'`;
+            break;
+        }
+      }
+
+      if (distance && distance !== "all") {
+        switch (distance) {
+          case "short":
+            whereClause += ` AND distance_mi < 1`;
+            break;
+          case "medium":
+            whereClause += ` AND distance_mi >= 1 AND distance_mi <= 5`;
+            break;
+          case "long":
+            whereClause += ` AND distance_mi > 5`;
+            break;
+        }
+      }
+
+      
+      if (weather && weather !== "all") {
+        let weatherConditions: string[] = [];
+        switch (weather) {
+          case "clear":
+            weatherConditions = ["%Clear%"];
+            break;
+          case "rain":
+            weatherConditions = ["%Rain%", "%Drizzle%", "%Showers%"];
+            break;
+          case "snow":
+            weatherConditions = ["%Snow%", "%Sleet%", "%Blizzard%"];
+            break;
+          case "fog":
+            weatherConditions = ["%Fog%", "%Mist%", "%Haze%"];
+            break;
+          case "cloudy":
+            weatherConditions = ["%Cloud%", "%Overcast%", "%Partly Cloudy%"];
+            break;
+        }
+        if (weatherConditions.length > 0) {
+          whereClause +=
+            " AND (" +
+            weatherConditions
+              .map((_, i) => `weather_condition ILIKE $${paramIndex + i}`)
+              .join(" OR ") +
+            ")";
+          values.push(...weatherConditions);
+          paramIndex += weatherConditions.length;
+        }
+      }
+
+      if (timeOfDay && timeOfDay !== "all") {
+        switch (timeOfDay) {
+          case "morning":
+            whereClause += ` AND EXTRACT(HOUR FROM start_time) >= 6 AND EXTRACT(HOUR FROM start_time) < 12`;
+            break;
+          case "afternoon":
+            whereClause += ` AND EXTRACT(HOUR FROM start_time) >= 12 AND EXTRACT(HOUR FROM start_time) < 17`;
+            break;
+          case "evening":
+            whereClause += ` AND EXTRACT(HOUR FROM start_time) >= 17 AND EXTRACT(HOUR FROM start_time) < 20`;
+            break;
+          case "night":
+            whereClause += ` AND (EXTRACT(HOUR FROM start_time) >= 20 OR EXTRACT(HOUR FROM start_time) < 6)`;
+            break;
+        }
+      }
+
+      if (dayOfWeek && dayOfWeek !== "all") {
+        switch (dayOfWeek) {
+          case "monday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 1`;
+            break;
+          case "tuesday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 2`;
+            break;
+          case "wednesday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 3`;
+            break;
+          case "thursday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 4`;
+            break;
+          case "friday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 5`;
+            break;
+          case "saturday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 6`;
+            break;
+          case "sunday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) = 0`;
+            break;
+          case "weekday":
+            whereClause += ` AND EXTRACT(DOW FROM start_time) BETWEEN 1 AND 5`;
+            break;
+          case "weekend":
+            whereClause += ` AND (EXTRACT(DOW FROM start_time) = 0 OR EXTRACT(DOW FROM start_time) = 6)`;
+            break;
+        }
       }
 
       const query = `SELECT severity, start_time FROM accidents ${whereClause}`;
