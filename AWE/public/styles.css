@@ -62,7 +62,7 @@ h1 {
     0 1.5px 4px 0 rgba(80, 75, 56, 0.08);
   padding: 2.5rem 2rem 2rem 2rem;
   border: 1.5px solid #ebe5c2;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -587,7 +587,9 @@ button[type="submit"]:hover {
   }
 
   #filters {
-    max-height: 85vh;
+    max-height: none;
+    height: auto;
+    overflow-y: auto;
     padding: 2rem 1.5rem 1.5rem 1.5rem;
   }
 
@@ -615,7 +617,8 @@ button[type="submit"]:hover {
 
   #filters {
     border-radius: 0;
-    overflow-y: visible;
+    max-height: 75vh;
+    overflow-y: auto;
   }
 
   .right-panel-container {
@@ -651,9 +654,9 @@ button[type="submit"]:hover {
   }
 
   #filters {
+    padding: 1rem;
     max-height: 70vh;
-    padding: 1.5rem 1rem 1rem 1rem;
-    order: 2;
+    overflow-y: auto;
   }
 
   #date-fields > div,
